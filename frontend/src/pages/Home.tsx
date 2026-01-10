@@ -470,25 +470,24 @@ export default function Home() {
         </div>
       </section>
 
-        <div className="mt-12 grid grid-cols-2 gap-5 sm:grid-cols-4">
-          {wardrobe.map((garment) => (
-            <article
-              key={garment.id}
-              className="group relative overflow-hidden rounded-lg border border-[#F5F1E8]/10 bg-[#131B2E] p-2.5 transition-colors hover:border-[#D4A017]/40"
-            >
-              <div className="relative aspect-[4/5] overflow-hidden rounded-md bg-black/20">
-                <img
-                  src={garment.thumbnailUrl}
-                  alt={garment.name}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <div className="pt-3">
-                <p className="truncate text-sm font-bold">{garment.name}</p>
-                <div className="mt-1 flex items-center justify-between">
-                  <span className="font-mono-label text-[10px] uppercase tracking-wider text-[#9AA3B5]">
-                    {garment.category}
-                  </span>
+      {/* ---------------------------------------------------------------- */}
+      {/* WARDROBE                                                          */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p className="font-mono-label text-xs uppercase tracking-[0.3em] text-[#D4A017]">
+              The Rack
+            </p>
+            <h2 className="font-display mt-3 text-3xl font-semibold sm:text-4xl">
+              Traditional weave. Modern cut.
+            </h2>
+          </div>
+          <Link to="/wardrobe" className="text-sm font-semibold text-[#C8102E] hover:underline">
+          </Link>
+        </div>
+
+
 
                 </div>
               </div>
