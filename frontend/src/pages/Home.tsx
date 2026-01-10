@@ -470,23 +470,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------------------------------------------------------------- */}
-      {/* WARDROBE                                                          */}
-      {/* ---------------------------------------------------------------- */}
-      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <p className="font-mono-label text-xs uppercase tracking-[0.3em] text-[#D4A017]">
-              The Rack
-            </p>
-            <h2 className="font-display mt-3 text-3xl font-semibold sm:text-4xl">
-              Traditional weave. Modern cut.
-            </h2>
-          </div>
-          <Link to="/wardrobe" className="text-sm font-semibold text-[#C8102E] hover:underline">
-          </Link>
-        </div>
-
         <div className="mt-12 grid grid-cols-2 gap-5 sm:grid-cols-4">
           {wardrobe.map((garment) => (
             <article
