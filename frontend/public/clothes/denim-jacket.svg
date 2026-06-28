@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="denimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2c3e50" />
+      <stop offset="50%" stop-color="#34495e" />
+      <stop offset="100%" stop-color="#1a252f" />
+    </linearGradient>
+    <linearGradient id="collarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4a6572" />
+      <stop offset="100%" stop-color="#2c3e50" />
+    </linearGradient>
+  </defs>
+  <!-- Jacket Body -->
+  <path d="M120 120 L190 70 L256 95 L322 70 L392 120 L440 260 L380 280 L360 190 L360 440 L152 440 L152 190 L132 280 L72 260 Z" fill="url(#denimGrad)" stroke="#1a252f" stroke-width="4" />
+  <!-- Collar -->
+  <path d="M190 70 L256 140 L322 70 L280 60 L232 60 Z" fill="url(#collarGrad)" stroke="#1a252f" stroke-width="3" />
+  <!-- Placket & Buttons -->
+  <line x1="256" y1="140" x2="256" y2="440" stroke="#1a252f" stroke-width="4" />
+  <circle cx="256" cy="180" r="6" fill="#f1c40f" />
+  <circle cx="256" cy="240" r="6" fill="#f1c40f" />
+  <circle cx="256" cy="300" r="6" fill="#f1c40f" />
+  <circle cx="256" cy="360" r="6" fill="#f1c40f" />
+  <circle cx="256" cy="410" r="6" fill="#f1c40f" />
+  <!-- Chest Pockets -->
+  <rect x="175" y="170" width="55" height="60" rx="6" fill="#243342" stroke="#4a6572" stroke-width="2" />
+  <rect x="282" y="170" width="55" height="60" rx="6" fill="#243342" stroke="#4a6572" stroke-width="2" />
+</svg>

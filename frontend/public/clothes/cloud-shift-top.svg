@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 960" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="600" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7dd3fc" stop-opacity="0.16" />
+      <stop offset="1" stop-color="#2563eb" stop-opacity="0.06" />
+    </linearGradient>
+    <linearGradient id="garment" x1="180" y1="120" x2="540" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7dd3fc" />
+      <stop offset="1" stop-color="#2563eb" />
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="720" height="960" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <rect width="720" height="960" rx="72" fill="url(#bg)" />
+  <circle cx="160" cy="160" r="90" fill="#7dd3fc" fill-opacity="0.12" />
+  <circle cx="580" cy="210" r="120" fill="#2563eb" fill-opacity="0.12" />
+  <g filter="url(#shadow)">
+    <path d="M252 194C252 156 283 126 321 126H399C437 126 468 156 468 194V234C468 247 474 259 485 266L535 298C552 309 558 331 549 349L514 419C504 438 480 445 461 435L441 425V726C441 757 416 782 385 782H335C304 782 279 757 279 726V425L259 435C240 445 216 438 206 419L171 349C162 331 168 309 185 298L235 266C246 259 252 247 252 234V194Z" fill="url(#garment)" />
+    <path d="M289 126H431V228C431 246 416 261 398 261H322C304 261 289 246 289 228V126Z" fill="#f8fafc" fill-opacity="0.25" />
+    <path d="M302 306C337 321 383 321 418 306" stroke="#ffffff" stroke-opacity="0.35" stroke-width="12" stroke-linecap="round" />
+    <path d="M290 390H430" stroke="#ffffff" stroke-opacity="0.2" stroke-width="8" stroke-linecap="round" />
+  </g>
+  <text x="50%" y="898" fill="#ffffff" fill-opacity="0.9" font-family="Arial, sans-serif" font-size="34" font-weight="700" text-anchor="middle">Cloud Shift Top</text>
+</svg>

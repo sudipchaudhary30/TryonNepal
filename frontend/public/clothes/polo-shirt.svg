@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="poloGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f2027" />
+      <stop offset="50%" stop-color="#203a43" />
+      <stop offset="100%" stop-color="#2c5364" />
+    </linearGradient>
+  </defs>
+  <!-- Main Body -->
+  <path d="M140 110 L200 75 L256 90 L312 75 L372 110 L415 210 L355 230 L340 160 L340 450 L172 450 L172 160 L157 230 L97 210 Z" fill="url(#poloGrad)" stroke="#0f2027" stroke-width="4" />
+  <!-- Collar -->
+  <path d="M200 75 L256 125 L312 75 L280 65 L232 65 Z" fill="#111" stroke="#000" stroke-width="2" />
+  <!-- Button Placket -->
+  <rect x="246" y="115" width="20" height="90" fill="#152836" rx="3" />
+  <circle cx="256" cy="135" r="4" fill="#fff" />
+  <circle cx="256" cy="165" r="4" fill="#fff" />
+  <circle cx="256" cy="190" r="4" fill="#fff" />
+</svg>

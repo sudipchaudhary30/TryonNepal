@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="teeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e74c3c" />
+      <stop offset="100%" stop-color="#c0392b" />
+    </linearGradient>
+  </defs>
+  <!-- Body -->
+  <path d="M140 120 L196 78 L230 88 L256 100 L282 88 L316 78 L372 120 L400 215 L350 230 L340 165 L340 450 L172 450 L172 165 L162 230 L112 215 Z" fill="url(#teeGrad)" stroke="#a93226" stroke-width="3" />
+  <!-- Crew Neck -->
+  <ellipse cx="256" cy="100" rx="52" ry="24" fill="#c0392b" stroke="#a93226" stroke-width="2" />
+  <!-- Left sleeve -->
+  <path d="M140 120 L112 140 L100 215 L140 225 L162 165 Z" fill="#d44235" stroke="#a93226" stroke-width="3" />
+  <!-- Right sleeve -->
+  <path d="M372 120 L400 140 L412 215 L372 225 L340 165 Z" fill="#d44235" stroke="#a93226" stroke-width="3" />
+  <!-- Graphic: Minimalist mountain -->
+  <polygon points="200,320 256,220 312,320" fill="rgba(255,255,255,0.22)" stroke="rgba(255,255,255,0.5)" stroke-width="2" />
+  <polygon points="225,320 265,265 305,320" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" />
+</svg>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bombGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2ecc71" />
+      <stop offset="100%" stop-color="#27ae60" />
+    </linearGradient>
+    <linearGradient id="ribGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a8a4a" />
+      <stop offset="100%" stop-color="#145c32" />
+    </linearGradient>
+  </defs>
+  <!-- Main Body -->
+  <path d="M130 110 L200 68 L256 88 L312 68 L382 110 L420 220 L360 238 L340 155 L340 415 L172 415 L172 155 L152 238 L92 220 Z" fill="url(#bombGrad)" stroke="#1a8a4a" stroke-width="3" />
+  <!-- Left sleeve -->
+  <path d="M130 110 L100 132 L78 275 L125 285 L152 155 Z" fill="#25b55e" stroke="#1a8a4a" stroke-width="3" />
+  <!-- Right sleeve -->
+  <path d="M382 110 L412 132 L434 275 L387 285 L340 155 Z" fill="#25b55e" stroke="#1a8a4a" stroke-width="3" />
+  <!-- Collar band/rib -->
+  <ellipse cx="256" cy="95" rx="58" ry="22" fill="url(#ribGrad)" stroke="#1a8a4a" stroke-width="2" />
+  <!-- Cuff ribs -->
+  <ellipse cx="100" cy="278" rx="24" ry="10" fill="url(#ribGrad)" stroke="#1a8a4a" stroke-width="2" />
+  <ellipse cx="412" cy="278" rx="24" ry="10" fill="url(#ribGrad)" stroke="#1a8a4a" stroke-width="2" />
+  <!-- Waistband rib -->
+  <rect x="172" y="400" width="168" height="28" rx="6" fill="url(#ribGrad)" stroke="#1a8a4a" stroke-width="2" />
+  <!-- Zip -->
+  <rect x="250" y="95" width="12" height="200" rx="2" fill="#1a8a4a" />
+  <rect x="248" y="130" width="16" height="10" rx="2" fill="#c0a060" />
+</svg>

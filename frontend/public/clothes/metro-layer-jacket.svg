@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 960" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="600" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#a78bfa" stop-opacity="0.16" />
+      <stop offset="1" stop-color="#4f46e5" stop-opacity="0.06" />
+    </linearGradient>
+    <linearGradient id="garment" x1="180" y1="120" x2="540" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#a78bfa" />
+      <stop offset="1" stop-color="#4f46e5" />
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="720" height="960" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <rect width="720" height="960" rx="72" fill="url(#bg)" />
+  <circle cx="160" cy="160" r="90" fill="#a78bfa" fill-opacity="0.12" />
+  <circle cx="580" cy="210" r="120" fill="#4f46e5" fill-opacity="0.12" />
+  <g filter="url(#shadow)">
+    <path d="M258 168C258 143 278 123 303 123H417C442 123 462 143 462 168V232L520 282C541 300 546 331 531 354L496 408C483 429 454 435 433 421L417 410V744C417 773 394 796 365 796H355C326 796 303 773 303 744V410L287 421C266 435 237 429 224 408L189 354C174 331 179 300 200 282L258 232V168Z" fill="url(#garment)" />
+    <path d="M317 123H403V260C403 278 388 293 370 293H350C332 293 317 278 317 260V123Z" fill="#ffffff" fill-opacity="0.2" />
+    <path d="M355 293V796" stroke="#ffffff" stroke-opacity="0.26" stroke-width="10" stroke-linecap="round" />
+    <path d="M317 427H393" stroke="#ffffff" stroke-opacity="0.18" stroke-width="8" stroke-linecap="round" />
+  </g>
+  <text x="50%" y="898" fill="#ffffff" fill-opacity="0.9" font-family="Arial, sans-serif" font-size="34" font-weight="700" text-anchor="middle">Metro Layer Jacket</text>
+</svg>

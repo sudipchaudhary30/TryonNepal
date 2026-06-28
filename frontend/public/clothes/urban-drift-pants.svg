@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 960" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="600" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#34d399" stop-opacity="0.16" />
+      <stop offset="1" stop-color="#0f766e" stop-opacity="0.06" />
+    </linearGradient>
+    <linearGradient id="garment" x1="180" y1="120" x2="540" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#34d399" />
+      <stop offset="1" stop-color="#0f766e" />
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="720" height="960" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <rect width="720" height="960" rx="72" fill="url(#bg)" />
+  <circle cx="160" cy="160" r="90" fill="#34d399" fill-opacity="0.12" />
+  <circle cx="580" cy="210" r="120" fill="#0f766e" fill-opacity="0.12" />
+  <g filter="url(#shadow)">
+    <path d="M278 132H442L458 410L487 775H420L378 477H342L300 775H233L262 410L278 132Z" fill="url(#garment)" />
+    <path d="M305 132L279 775" stroke="#ffffff" stroke-opacity="0.16" stroke-width="8" stroke-linecap="round" />
+    <path d="M415 132L441 775" stroke="#ffffff" stroke-opacity="0.16" stroke-width="8" stroke-linecap="round" />
+    <path d="M343 132H377" stroke="#ffffff" stroke-opacity="0.3" stroke-width="10" stroke-linecap="round" />
+  </g>
+  <text x="50%" y="898" fill="#ffffff" fill-opacity="0.9" font-family="Arial, sans-serif" font-size="34" font-weight="700" text-anchor="middle">Urban Drift Pants</text>
+</svg>

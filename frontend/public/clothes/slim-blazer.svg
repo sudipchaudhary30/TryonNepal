@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="blazerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e" />
+      <stop offset="60%" stop-color="#16213e" />
+      <stop offset="100%" stop-color="#0f3460" />
+    </linearGradient>
+    <linearGradient id="lapelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d0d1a" />
+      <stop offset="100%" stop-color="#1a1a35" />
+    </linearGradient>
+  </defs>
+  <!-- Left panel -->
+  <path d="M130 100 L200 60 L256 100 L256 460 L140 460 L110 300 Z" fill="url(#blazerGrad)" stroke="#0d0d1a" stroke-width="3" />
+  <!-- Right panel -->
+  <path d="M382 100 L312 60 L256 100 L256 460 L372 460 L402 300 Z" fill="url(#blazerGrad)" stroke="#0d0d1a" stroke-width="3" />
+  <!-- Left sleeve -->
+  <path d="M130 100 L100 120 L70 290 L120 305 L140 160 Z" fill="#141428" stroke="#0d0d1a" stroke-width="3" />
+  <!-- Right sleeve -->
+  <path d="M382 100 L412 120 L442 290 L392 305 L372 160 Z" fill="#141428" stroke="#0d0d1a" stroke-width="3" />
+  <!-- Left lapel -->
+  <path d="M200 60 L256 145 L256 100 Z" fill="url(#lapelGrad)" stroke="#0d0d1a" stroke-width="2" />
+  <!-- Right lapel -->
+  <path d="M312 60 L256 145 L256 100 Z" fill="url(#lapelGrad)" stroke="#0d0d1a" stroke-width="2" />
+  <!-- Buttons -->
+  <circle cx="256" cy="250" r="6" fill="#c0a060" />
+  <circle cx="256" cy="310" r="6" fill="#c0a060" />
+  <!-- Breast pocket -->
+  <rect x="290" y="175" width="45" height="30" rx="3" fill="#111124" stroke="#2a2a50" stroke-width="1.5" />
+  <!-- Pocket square -->
+  <path d="M293 175 L335 175 L325 162 L303 162 Z" fill="#c0392b" />
+  <!-- Cuff buttons -->
+  <circle cx="95" cy="295" r="5" fill="#c0a060" />
+  <circle cx="415" cy="295" r="5" fill="#c0a060" />
+</svg>

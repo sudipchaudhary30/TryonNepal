@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 960" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="600" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fb7185" stop-opacity="0.16" />
+      <stop offset="1" stop-color="#f97316" stop-opacity="0.06" />
+    </linearGradient>
+    <linearGradient id="garment" x1="180" y1="120" x2="540" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fb7185" />
+      <stop offset="1" stop-color="#f97316" />
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="720" height="960" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <rect width="720" height="960" rx="72" fill="url(#bg)" />
+  <circle cx="160" cy="160" r="90" fill="#fb7185" fill-opacity="0.12" />
+  <circle cx="580" cy="210" r="120" fill="#f97316" fill-opacity="0.12" />
+  <g filter="url(#shadow)">
+    <path d="M318 126H402V193C402 206 408 218 419 225L476 261C491 271 499 288 496 306L448 566C434 645 379 702 360 702C341 702 286 645 272 566L224 306C221 288 229 271 244 261L301 225C312 218 318 206 318 193V126Z" fill="url(#garment)" />
+    <path d="M280 309C314 327 406 327 440 309" stroke="#ffffff" stroke-opacity="0.34" stroke-width="12" stroke-linecap="round" />
+    <path d="M244 558C288 520 432 520 476 558" stroke="#ffffff" stroke-opacity="0.18" stroke-width="8" stroke-linecap="round" />
+  </g>
+  <text x="50%" y="898" fill="#ffffff" fill-opacity="0.9" font-family="Arial, sans-serif" font-size="34" font-weight="700" text-anchor="middle">Sunset Flow Dress</text>
+</svg>

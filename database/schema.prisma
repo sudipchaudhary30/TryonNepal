@@ -1,0 +1,91 @@
+generator prisma_client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GarmentCategory {
+  TOP
+  BOTTOM
+  DRESS
+  OUTERWEAR
+  TRADITIONAL
+  ACCESSORY
+}
+
+model User {
+  id         String         @id @default(cuid())
+  email      String         @unique
+  name       String
+  avatarUrl  String?
+  age        Int?
+  heightCm   Float?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  garments   Garment[]
+  outfits    Outfit[]
+  sessions   TryOnSession[]
+}
+
+model Garment {
+  id             String          @id @default(cuid())
+  userId         String
+  name           String
+  category       GarmentCategory
+  imageUrl       String
+  thumbnailUrl   String
+  isCustomDesign Boolean         @default(false)
+  designData     Json?
+  brand          String?
+  price          Float?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  outfits        OutfitGarment[]
+  sessions       TryOnSession[]
+
+  @@index([userId])
+  @@index([category])
+}
+
+model Outfit {
+  id            String          @id @default(cuid())
+  userId        String
+  name          String
+  previewImageUrl String?
+  tags          String[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  garments      OutfitGarment[]
+
+  @@index([userId])
+}
+
+model OutfitGarment {
+  outfitId String
+  garmentId String
+  outfit   Outfit  @relation(fields: [outfitId], references: [id], onDelete: Cascade)
+  garment  Garment @relation(fields: [garmentId], references: [id], onDelete: Cascade)
+
+  @@id([outfitId, garmentId])
+}
+
+model TryOnSession {
+  id              String    @id @default(cuid())
+  userId          String
+  garmentId       String
+  resultImageUrl  String?
+  processingTimeMs Int?
+  deviceInfo      String?
+  feedback        Int?
+  createdAt       DateTime  @default(now())
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  garment         Garment   @relation(fields: [garmentId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([garmentId])
+}

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 960" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="600" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f59e0b" stop-opacity="0.16" />
+      <stop offset="1" stop-color="#b45309" stop-opacity="0.06" />
+    </linearGradient>
+    <linearGradient id="garment" x1="180" y1="120" x2="540" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f59e0b" />
+      <stop offset="1" stop-color="#b45309" />
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="720" height="960" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <rect width="720" height="960" rx="72" fill="url(#bg)" />
+  <circle cx="160" cy="160" r="90" fill="#f59e0b" fill-opacity="0.12" />
+  <circle cx="580" cy="210" r="120" fill="#b45309" fill-opacity="0.12" />
+  <g filter="url(#shadow)">
+    <path d="M276 146C276 132 287 121 301 121H419C433 121 444 132 444 146V201L497 260C509 274 510 294 500 310L462 374V720C462 755 434 783 399 783H321C286 783 258 755 258 720V374L220 310C210 294 211 274 223 260L276 201V146Z" fill="url(#garment)" />
+    <path d="M322 121H398V239C398 257 384 271 366 271H354C336 271 322 257 322 239V121Z" fill="#fff" fill-opacity="0.22" />
+    <path d="M301 322C338 341 382 341 419 322" stroke="#ffffff" stroke-opacity="0.35" stroke-width="12" stroke-linecap="round" />
+    <path d="M286 451C326 425 394 425 434 451" stroke="#ffffff" stroke-opacity="0.18" stroke-width="8" stroke-linecap="round" />
+  </g>
+  <text x="50%" y="898" fill="#ffffff" fill-opacity="0.9" font-family="Arial, sans-serif" font-size="34" font-weight="700" text-anchor="middle">Heritage Drape</text>
+</svg>
