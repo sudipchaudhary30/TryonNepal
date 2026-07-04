@@ -109,27 +109,7 @@ export default function Home() {
             </div>
           </article>
 
-          <div className="space-y-6">
-            {storySections.slice(1).map((section) => (
-              <article key={section.title} className="border border-border/80 bg-card/80 p-7">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-accent">{section.eyebrow}</p>
-                <h3 className="mt-3 font-display text-2xl leading-tight text-offwhite">{section.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/70">{section.body}</p>
-                {section.bullets && (
-                  <ul className="mt-5 space-y-2 text-sm text-white/75">
-                    {section.bullets.map((bullet) => (
-                      <li key={bullet} className="flex items-center gap-2">
-                        <span className="h-2 w-2 bg-accent" />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </article>
-            ))}
-          </div>
-        </div>
-
+          
         <section className="mt-16 border-t border-border/80 pt-12">
           <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
             <div>
