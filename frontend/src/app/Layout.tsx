@@ -4,9 +4,6 @@ const navItems = [
   { to: '/', label: 'Home' },
   { to: '/tryon', label: 'Try On' },
   { to: '/community', label: 'Community' },
-  { to: '/wardrobe', label: 'Wardrobe' },
-  { to: '/design', label: 'Design' },
-  { to: '/showroom', label: 'Showroom' },
   { to: '/profile', label: 'Profile' },
 ];
 
