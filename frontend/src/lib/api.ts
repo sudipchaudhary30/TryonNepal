@@ -1,28 +1,20 @@
 import axios from 'axios';
 
-import type { Garment, GarmentCategory, GarmentFilter, GarmentUploadPayload } from '@/types/garment';
+import type { Garment, GarmentCategory, GarmentFilter } from '@/types/garment';
 import type { Outfit, OutfitCreatePayload } from '@/types/outfit';
 import type { TryOnResult, GarmentType } from '@/types/ar';
 import type { User } from '@/types/user';
-import { supabase } from './supabase';
 import { useUserStore } from '@/store/useUserStore';
 import { demoGarments } from './demoGarments';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000',
+  baseURL: import.meta.env.VITE_API_URL || 'http://127.0.0.1:4000',
   timeout: 30000,
+  withCredentials: true,
 });
 
 api.interceptors.request.use(async (config) => {
   const session = useUserStore.getState().session;
-  if (!session) {
-    const { data } = await supabase.auth.getSession();
-    if (data.session) {
-      config.headers.Authorization = `Bearer ${data.session.access_token}`;
-      return config;
-    }
-  }
-
   if (session?.access_token) {
     config.headers.Authorization = `Bearer ${session.access_token}`;
   }
@@ -173,9 +165,20 @@ export const outfitApi = {
 };
 
 export const userApi = {
+  async register(email: string, password: string, name: string): Promise<User> {
+    const { data } = await api.post<{ user: User }>('/api/auth/register', { email, password, name });
+    return data.user;
+  },
+  async login(email: string, password: string): Promise<User> {
+    const { data } = await api.post<{ user: User }>('/api/auth/login', { email, password });
+    return data.user;
+  },
+  async logout(): Promise<void> {
+    await api.post('/api/auth/logout');
+  },
   async getProfile(): Promise<User> {
-    const { data } = await api.get<User>('/api/users/me');
-    return data;
+    const { data } = await api.get<{ user: User }>('/api/auth/me');
+    return data.user;
   },
   async updateProfile(data: Partial<User>): Promise<User> {
     const response = await api.patch<User>('/api/users/me', data);

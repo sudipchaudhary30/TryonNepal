@@ -1,10 +1,24 @@
 {
-  "name": "dressmesh-backend",
+  "name": "ar-tryon-nepal-backend",
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "dev": "python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
-    "start": "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000",
-    "test": "pytest"
+    "dev": "node server.js",
+    "start": "node server.js",
+    "test": "jest --runInBand"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.14.1",
+    "cookie-parser": "^1.4.6",
+    "cookie": "^0.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.1",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.2.0",
+    "mongoose": "^8.15.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "dressmesh-nepal-frontend",
+  "name": "ar-tryon-nepal-frontend",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -15,7 +15,6 @@
     "@mediapipe/selfie_segmentation": "^0.1.1675465747",
     "@react-three/drei": "^9.114.0",
     "@react-three/fiber": "^8.16.8",
-    "@supabase/supabase-js": "^2.43.1",
     "@tensorflow-models/body-pix": "^2.2.1",
     "@tensorflow/tfjs": "^4.20.0",
     "axios": "^1.7.2",

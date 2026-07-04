@@ -5,7 +5,7 @@ import sys
 from logging import Logger
 
 
-def get_logger(name: str = 'dressmesh') -> Logger:
+def get_logger(name: str = 'ar-tryon-nepal') -> Logger:
     logger = logging.getLogger(name)
     if logger.handlers:
         return logger

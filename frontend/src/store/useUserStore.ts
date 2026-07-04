@@ -2,13 +2,11 @@ import { devtools, persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { create } from 'zustand';
 
-import { supabase } from '@/lib/supabase';
 import { userApi } from '@/lib/api';
-import type { AuthState, User } from '@/types/user';
+import type { User } from '@/types/user';
 
 interface SessionToken {
   access_token: string;
-  refresh_token: string;
 }
 
 interface UserStore {
@@ -27,52 +25,50 @@ interface UserStore {
 export const useUserStore = create<UserStore>()(
   devtools(
     persist(
-      immer((set, get) => ({
+      immer((set) => ({
         user: null,
         session: null,
         isLoading: false,
         isAuthenticated: false,
         signInWithGoogle: async () => {
-          await supabase.auth.signInWithOAuth({ provider: 'google' });
+          throw new Error('Google sign-in is unavailable in the custom auth flow.');
         },
         signInWithEmail: async (email, password) => {
           set((state) => {
             state.isLoading = true;
           });
-          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-          if (error) {
-            throw error;
+          try {
+            const profile = await userApi.login(email, password);
+            set((state) => {
+              state.user = profile;
+              state.session = { access_token: 'cookie-session' };
+              state.isAuthenticated = true;
+            });
+          } finally {
+            set((state) => {
+              state.isLoading = false;
+            });
           }
-          set((state) => {
-            state.session = data.session
-              ? { access_token: data.session.access_token, refresh_token: data.session.refresh_token }
-              : null;
-            state.isAuthenticated = Boolean(data.session);
-            state.isLoading = false;
-          });
         },
         signUp: async (email, password, name) => {
           set((state) => {
             state.isLoading = true;
           });
-          const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: { data: { name } },
-          });
-          if (error) {
-            throw error;
+          try {
+            const profile = await userApi.register(email, password, name);
+            set((state) => {
+              state.user = profile;
+              state.session = { access_token: 'cookie-session' };
+              state.isAuthenticated = true;
+            });
+          } finally {
+            set((state) => {
+              state.isLoading = false;
+            });
           }
-          set((state) => {
-            state.session = data.session
-              ? { access_token: data.session.access_token, refresh_token: data.session.refresh_token }
-              : null;
-            state.isAuthenticated = Boolean(data.session);
-            state.isLoading = false;
-          });
         },
         signOut: async () => {
-          await supabase.auth.signOut();
+          await userApi.logout();
           set((state) => {
             state.user = null;
             state.session = null;
@@ -83,23 +79,19 @@ export const useUserStore = create<UserStore>()(
           set((state) => {
             state.isLoading = true;
           });
-          const { data } = await supabase.auth.getSession();
-          if (data.session) {
+          try {
+            const profile = await userApi.getProfile();
             set((state) => {
-              state.session = {
-                access_token: data.session.access_token,
-                refresh_token: data.session.refresh_token,
-              };
+              state.user = profile;
+              state.session = { access_token: 'cookie-session' };
               state.isAuthenticated = true;
             });
-            try {
-              const profile = await userApi.getProfile();
-              set((state) => {
-                state.user = profile;
-              });
-            } catch {
-              // If the profile endpoint is unavailable, keep the auth session active.
-            }
+          } catch {
+            set((state) => {
+              state.user = null;
+              state.session = null;
+              state.isAuthenticated = false;
+            });
           }
           set((state) => {
             state.isLoading = false;
@@ -113,11 +105,11 @@ export const useUserStore = create<UserStore>()(
         },
       })),
       {
-        name: 'dressmesh-user-store',
+        name: 'ar-tryon-nepal-user-store',
         storage: createJSONStorage(() => localStorage),
         partialize: (state) => ({ user: state.user, session: state.session, isAuthenticated: state.isAuthenticated }),
       },
     ),
-    { name: 'dressmesh-user-store' },
+    { name: 'ar-tryon-nepal-user-store' },
   ),
 );

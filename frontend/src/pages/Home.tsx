@@ -30,42 +30,62 @@ const storySections = [
   },
 ];
 
+const highlights = [
+  'Live fit previews before checkout',
+  'Cinematic, body-aware garment mapping',
+  'Built for the way young Nepal shops online',
+];
+
 export default function Home() {
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <section className="relative isolate overflow-hidden">
+    <div className="min-h-screen bg-bg text-offwhite">
+      <section className="relative isolate overflow-hidden border-b border-border/80">
         <div className="absolute inset-0">
           <img src={heroImage} alt="Young shopper exploring fashion" className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-slate-950/75" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-slate-950/30" />
+          <div className="absolute inset-0 bg-bg/82" />
+          <div className="absolute inset-0 bg-gradient-to-r from-bg via-bg/90 to-bg/40" />
         </div>
 
-        <div className="relative mx-auto flex min-h-[calc(100vh-80px)] max-w-7xl flex-col justify-center px-4 py-20 sm:px-6 lg:px-8">
-          <div className="max-w-3xl space-y-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.25em] text-accent">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent"></span>
-              </span>
+        <div className="relative mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl flex-col justify-between px-4 py-16 sm:px-6 lg:px-8">
+          <div className="max-w-3xl pt-10">
+            <p className="mb-6 text-[10px] font-semibold uppercase tracking-[0.35em] text-accent">
               Made For Nepal's Rising Generation
-            </div>
-
-            <h1 className="font-display text-5xl font-black leading-[1.05] tracking-tight text-white sm:text-7xl lg:text-8xl">
-              Try it on. <br />
-              <span className="bg-gradient-to-r from-accent via-white to-white bg-clip-text text-transparent">Before it's yours.</span>
+            </p>
+            <h1 className="max-w-3xl font-display text-5xl leading-[0.9] text-offwhite sm:text-6xl lg:text-7xl">
+              Try it on.
+              <br />
+              <span className="text-offwhite/90">Before it's yours.</span>
             </h1>
-
-            <p className="max-w-2xl text-base leading-relaxed text-slate-200/90 sm:text-lg">
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg">
               A virtual fitting room built for how young Nepal actually shops. Stand in front of your camera and see the fit come to life — shaped around your body, live.
             </p>
-
-            <div className="flex flex-wrap gap-4 pt-2">
+            <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 to="/tryon"
-                className="rounded-full bg-accent px-8 py-4 font-bold text-black shadow-lg shadow-accent/20 transition-all duration-300 hover:scale-[1.03] hover:shadow-accent/35"
+                className="border border-accent bg-accent px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-bg transition-all duration-200 hover:bg-accent/90"
               >
                 Start Now
               </Link>
+              <Link
+                to="/community"
+                className="border border-white/20 bg-transparent px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-offwhite transition-all duration-200 hover:border-accent hover:text-accent"
+              >
+                See the community
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-6 text-sm text-white/70 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.35em] text-accent">Now streaming</p>
+              <p className="mt-1 text-offwhite">Real-time fit preview, no guesswork.</p>
+            </div>
+            <div className="flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.28em]">
+              {highlights.map((item) => (
+                <span key={item} className="border border-white/10 px-3 py-2 text-white/70">
+                  {item}
+                </span>
+              ))}
             </div>
           </div>
         </div>
@@ -73,30 +93,33 @@ export default function Home() {
 
       <main className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-          <article className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/20 backdrop-blur-md">
-            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-accent">The Gap We Noticed</p>
-            <h2 className="mt-3 font-display text-3xl font-bold leading-snug text-white">
+          <article className="border border-border/80 bg-offwhite p-8 text-bg">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-accent-dark">The Gap We Noticed</p>
+            <h2 className="mt-3 font-display text-3xl leading-tight sm:text-4xl">
               A picture never told the whole story.
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-slate-300">
+            <p className="mt-4 text-base leading-relaxed text-bg/70">
               Every fashion site shows the same setup — a product photo, a generic size chart, and a model built nothing like you. For young men shopping online across Nepal, that disconnect runs even deeper.
             </p>
-            <p className="mt-4 text-base leading-relaxed text-slate-300">
+            <p className="mt-4 text-base leading-relaxed text-bg/70">
               So you size up, hope for the best, and often get it wrong — then deal with a return process that is more painful than just waiting.
             </p>
+            <div className="mt-8 border-t border-bg/15 pt-6 text-[11px] font-semibold uppercase tracking-[0.3em] text-bg/60">
+              No more guessing games.
+            </div>
           </article>
 
           <div className="space-y-6">
             {storySections.slice(1).map((section) => (
-              <article key={section.title} className="rounded-3xl border border-white/10 bg-slate-900/70 p-7 backdrop-blur-sm">
-                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-accent/80">{section.eyebrow}</p>
-                <h3 className="mt-3 font-display text-2xl font-semibold text-white">{section.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-slate-300">{section.body}</p>
+              <article key={section.title} className="border border-border/80 bg-card/80 p-7">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-accent">{section.eyebrow}</p>
+                <h3 className="mt-3 font-display text-2xl leading-tight text-offwhite">{section.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/70">{section.body}</p>
                 {section.bullets && (
-                  <ul className="mt-5 space-y-2 text-sm text-slate-200">
+                  <ul className="mt-5 space-y-2 text-sm text-white/75">
                     {section.bullets.map((bullet) => (
                       <li key={bullet} className="flex items-center gap-2">
-                        <span className="h-2 w-2 rounded-full bg-accent" />
+                        <span className="h-2 w-2 bg-accent" />
                         <span>{bullet}</span>
                       </li>
                     ))}
@@ -106,12 +129,37 @@ export default function Home() {
             ))}
           </div>
         </div>
+
+        <section className="mt-16 border-t border-border/80 pt-12">
+          <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-accent">A New Standard</p>
+              <h3 className="mt-3 font-display text-3xl leading-tight text-offwhite sm:text-4xl">
+                Structured, severe, and quietly luxurious.
+              </h3>
+            </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              {[
+                ['01', 'Monochrome discipline', 'A strict black, white, and gold system with no decorative excess.'],
+                ['02', 'Architectural rhythm', 'Sharp edges and deliberate spacing create a premium editorial feel.'],
+                ['03', 'Quiet motion', 'Minimal animation that feels precise rather than playful.'],
+              ].map(([number, title, copy]) => (
+                <div key={title} className="border border-border/80 bg-card/70 p-5">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-accent">{number}</p>
+                  <h4 className="mt-3 text-lg font-semibold text-offwhite">{title}</h4>
+                  <p className="mt-2 text-sm leading-relaxed text-white/65">{copy}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
 
-      <footer className="border-t border-white/10 bg-slate-950/80 px-4 py-12 text-center sm:px-6 lg:px-8">
-        <p className="text-xl font-semibold italic text-slate-200 sm:text-2xl">
-          Nepal's fitting room, built around you.
-        </p>
+      <footer className="border-t border-border/80 bg-bg/95 px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/60 sm:flex-row sm:items-center sm:justify-between">
+          <p className="font-display text-xl text-offwhite">Nepal's fitting room, built around you.</p>
+          <p className="text-[11px] uppercase tracking-[0.3em] text-accent">Luxury fashion-tech, without the noise.</p>
+        </div>
       </footer>
     </div>
   );

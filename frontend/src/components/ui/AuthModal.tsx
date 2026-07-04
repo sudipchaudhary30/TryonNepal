@@ -26,7 +26,7 @@ function passwordStrength(password: string): number {
 }
 
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
-  const { signInWithEmail, signInWithGoogle, signUp, isLoading } = useUserStore();
+  const { signInWithEmail, signUp, isLoading } = useUserStore();
   const [tab, setTab] = useState<Tab>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -145,7 +145,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.2 }}
-          className="w-full max-w-lg rounded-3xl border border-white/10 bg-card p-6 shadow-2xl"
+          className="w-full max-w-lg border border-white/10 bg-[#111111] p-6"
         >
           <div className="flex items-center justify-between gap-4">
             <div>
@@ -154,29 +154,29 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 {tab === 'signin' ? 'Welcome back' : 'Create your account'}
               </h2>
             </div>
-            <button type="button" onClick={onClose} className="rounded-full border border-white/10 px-3 py-2 text-sm text-white/70 hover:bg-white/5">
+            <button type="button" onClick={onClose} className="border border-white/10 px-3 py-2 text-sm text-white/70 hover:bg-white/5">
               Close
             </button>
           </div>
 
-          <div className="mt-6 grid grid-cols-2 rounded-full border border-white/10 bg-black/20 p-1">
+          <div className="mt-6 grid grid-cols-2 border border-white/10 bg-black/20 p-1">
             <button
               type="button"
               onClick={() => setTab('signin')}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${tab === 'signin' ? 'bg-accent text-black' : 'text-white/70'}`}
+              className={`px-4 py-2 text-sm font-semibold transition-colors ${tab === 'signin' ? 'bg-accent text-black' : 'text-white/70'}`}
             >
               Sign In
             </button>
             <button
               type="button"
               onClick={() => setTab('signup')}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${tab === 'signup' ? 'bg-accent text-black' : 'text-white/70'}`}
+              className={`px-4 py-2 text-sm font-semibold transition-colors ${tab === 'signup' ? 'bg-accent text-black' : 'text-white/70'}`}
             >
               Sign Up
             </button>
           </div>
 
-          {error ? <p className="mt-4 rounded-2xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</p> : null}
+          {error ? <p className="mt-4 border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</p> : null}
 
           <div className="mt-6 space-y-4">
             {tab === 'signup' ? (
@@ -225,7 +225,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   {[1, 2, 3, 4].map((bar) => (
                     <span
                       key={bar}
-                      className={`h-2 flex-1 rounded-full ${bar <= strength ? 'bg-accent' : 'bg-white/10'}`}
+                      className={`h-2 flex-1 ${bar <= strength ? 'bg-accent' : 'bg-white/10'}`}
                     />
                   ))}
                 </div>
@@ -249,7 +249,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             ) : null}
 
             {tab === 'signup' ? (
-              <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
+              <label className="flex items-center gap-3 border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/80">
                 <input
                   type="checkbox"
                   checked={agree}
@@ -268,25 +268,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               {tab === 'signin' ? 'Sign In' : 'Sign Up'}
             </Button>
 
-            <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/30">
-              <span className="h-px flex-1 bg-white/10" />
-              <span>or</span>
-              <span className="h-px flex-1 bg-white/10" />
+            <div className="border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/70">
+              Email access is enabled for the private fitting room. Use your account credentials to continue.
             </div>
-
-            <button
-              type="button"
-              onClick={() => void signInWithGoogle()}
-              className="flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white px-4 py-3 text-sm font-semibold text-black transition-transform hover:scale-[1.01]"
-            >
-              <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5">
-                <path
-                  fill="#EA4335"
-                  d="M12 10.2v3.95h5.6c-.24 1.3-1.12 3.02-5.6 3.02a6.55 6.55 0 1 1 0-13.1 5.8 5.8 0 0 1 4.1 1.6l2.8-2.7A10 10 0 1 0 12 22c5.9 0 9.8-3.8 9.8-9.2 0-.62-.06-1.12-.14-1.6H12Z"
-                />
-              </svg>
-              Continue with Google
-            </button>
 
             <button
               type="button"

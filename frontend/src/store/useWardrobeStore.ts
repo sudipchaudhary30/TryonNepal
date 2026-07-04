@@ -113,11 +113,11 @@ export const useWardrobeStore = create<WardrobeStore>()(
         },
       })),
       {
-        name: 'dressmesh-wardrobe-store',
+        name: 'ar-tryon-nepal-wardrobe-store',
         storage: createJSONStorage(() => localStorage),
         partialize: (state) => ({ selectedGarment: state.selectedGarment, filter: state.filter }),
       },
     ),
-    { name: 'dressmesh-wardrobe-store' },
+    { name: 'ar-tryon-nepal-wardrobe-store' },
   ),
 );

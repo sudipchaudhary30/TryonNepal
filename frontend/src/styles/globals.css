@@ -3,18 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #111111;
-  --bg-card: #161616;
-  --accent: #e8ff47;
-  --accent-warm: #ff6b35;
-  --text-primary: #f5f5f5;
-  --text-muted: #666666;
-  --border: #222222;
+  --bg-primary: #040404;
+  --bg-secondary: #0d0d0d;
+  --bg-card: #0f0f0f;
+  --accent: #c9a66b;
+  --accent-strong: #9c7a3f;
+  --off-white: #f5f1e8;
+  --text-primary: #f5f1e8;
+  --text-muted: #a6a095;
+  --border: #24201a;
 }
 
 html {
   background: var(--bg-primary);
+  scroll-behavior: smooth;
 }
 
 body {
@@ -22,13 +24,35 @@ body {
   min-height: 100vh;
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent 28%, transparent 72%, rgba(201,166,107,0.04));
+  opacity: 0.7;
 }
 
 * {
   box-sizing: border-box;
 }
 
+img {
+  display: block;
+}
+
+::selection {
+  background: rgba(201, 166, 107, 0.35);
+  color: #ffffff;
+}
+
 .font-display {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', serif;
+  font-weight: 600;
+  letter-spacing: -0.03em;
 }

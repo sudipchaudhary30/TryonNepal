@@ -94,7 +94,7 @@ function writeGLB(primitiveList, outPath) {
   const binBuf = Buffer.concat(binParts);
 
   const gltf = {
-    asset: { version: '2.0', generator: 'DressMesh Nepal AR' },
+    asset: { version: '2.0', generator: 'AR TryOn Nepal' },
     scene: 0,
     scenes: [{ nodes: [0] }],
     nodes: [{ mesh: 0 }],

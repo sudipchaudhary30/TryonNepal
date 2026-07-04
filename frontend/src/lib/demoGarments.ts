@@ -4,7 +4,7 @@ import type { GarmentType } from '@/types/ar';
 
 const sharedMeta = {
   userId: 'demo',
-  brand: 'DressMesh Nepal',
+  brand: 'AR TryOn Nepal',
   price: null,
   isCustomDesign: false,
   designData: null,

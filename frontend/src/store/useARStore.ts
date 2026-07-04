@@ -60,6 +60,6 @@ export const useARStore = create<ARStore>()(
         state.isActive = isActive;
       }),
     })),
-    { name: 'dressmesh-ar-store' },
+    { name: 'ar-tryon-nepal-ar-store' },
   ),
 );

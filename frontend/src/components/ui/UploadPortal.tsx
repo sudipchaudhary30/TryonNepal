@@ -109,7 +109,7 @@ export default function UploadPortal({ open, onClose, onUploadSuccess }: UploadP
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70"
           onClick={onClose}
         >
           <motion.div
@@ -117,7 +117,7 @@ export default function UploadPortal({ open, onClose, onUploadSuccess }: UploadP
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.92, opacity: 0, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-            className="relative w-full max-w-xl rounded-3xl border border-white/10 bg-[#0e0e14] p-6 shadow-2xl"
+            className="relative w-full max-w-xl border border-white/10 bg-[#0e0e14] p-6"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -126,19 +126,19 @@ export default function UploadPortal({ open, onClose, onUploadSuccess }: UploadP
                 <p className="text-[10px] font-black uppercase tracking-widest text-accent">Community Upload</p>
                 <h2 className="mt-0.5 font-display text-2xl font-black text-white">Add Your Clothing</h2>
               </div>
-              <button onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/60 hover:border-white/20 hover:text-white transition-colors">
+              <button onClick={onClose} className="flex h-9 w-9 items-center justify-center border border-white/10 text-white/60 hover:border-white/20 hover:text-white transition-colors">
                 ✕
               </button>
             </div>
 
             {/* Tabs */}
-            <div className="mb-5 flex gap-1 rounded-full border border-white/10 bg-black/30 p-1">
+            <div className="mb-5 flex gap-1 border border-white/10 bg-black/30 p-1">
               {(['2D', '3D'] as UploadTab[]).map((t) => (
                 <button
                   key={t}
                   onClick={() => setTab(t)}
-                  className={`flex-1 rounded-full py-2 text-xs font-bold uppercase tracking-widest transition-all duration-200 ${
-                    tab === t ? 'bg-accent text-black shadow-lg shadow-accent/20' : 'text-white/50 hover:text-white'
+                  className={`flex-1 py-2 text-xs font-bold uppercase tracking-widest transition-all duration-200 ${
+                    tab === t ? 'bg-accent text-black' : 'text-white/50 hover:text-white'
                   }`}
                 >
                   {t === '2D' ? '📷 2D Image' : '🧊 3D Model (.glb)'}
@@ -238,7 +238,7 @@ export default function UploadPortal({ open, onClose, onUploadSuccess }: UploadP
               <button
                 onClick={handleSubmit}
                 disabled={uploading || success}
-                className="w-full rounded-xl bg-accent py-3 text-sm font-black uppercase tracking-widest text-black shadow-lg shadow-accent/20 transition-all hover:brightness-110 disabled:opacity-50"
+                className="w-full bg-accent py-3 text-sm font-black uppercase tracking-widest text-black transition-all hover:brightness-110 disabled:opacity-50"
               >
                 {uploading ? 'Uploading...' : `Share ${tab} Garment with Community`}
               </button>

@@ -67,7 +67,7 @@ export default function ClothingSelector({ garments, selectedGarment, onSelect, 
         })}
       </div>
 
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {visibleGarments.map((garment) => {
           const selected = selectedGarment?.id === garment.id;
           return (
@@ -81,7 +81,7 @@ export default function ClothingSelector({ garments, selectedGarment, onSelect, 
                 <img src={garment.thumbnailUrl} alt={garment.name} className="h-full w-full object-cover" />
               </div>
               <p className="mt-2 truncate text-sm font-semibold text-white">{garment.name}</p>
-              <p className="truncate text-xs text-white/60">{garment.brand ?? 'DressMesh Nepal'}</p>
+              <p className="truncate text-xs text-white/60">{garment.brand ?? 'AR TryOn Nepal'}</p>
               <p className="text-[11px] uppercase tracking-[0.24em] text-white/45">{garment.category}</p>
             </button>
           );

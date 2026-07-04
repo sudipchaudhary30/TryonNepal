@@ -103,7 +103,7 @@ export default function Community() {
           </div>
           <button
             onClick={() => setUploadOpen(true)}
-            className="flex items-center gap-2 rounded-2xl bg-accent px-6 py-3 text-sm font-black uppercase tracking-wider text-black shadow-xl shadow-accent/25 transition-all hover:brightness-110 hover:scale-[1.02]"
+            className="flex items-center gap-2 bg-accent px-6 py-3 text-sm font-black uppercase tracking-wider text-black transition-all hover:brightness-110 hover:scale-[1.01]"
           >
             <span className="text-base">↑</span>
             Upload Your Clothes
@@ -116,16 +116,16 @@ export default function Community() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search garments, brands, uploaders..."
-            className="min-w-[240px] flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-accent/50 focus:outline-none"
+            className="min-w-[240px] flex-1 border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-accent/50 focus:outline-none"
           />
           <div className="flex flex-wrap gap-2">
             {CATEGORY_FILTERS.map((cf) => (
               <button
                 key={cf.value}
                 onClick={() => setActiveCategory(cf.value)}
-                className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider border transition-all ${
+                className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider border transition-all ${
                   activeCategory === cf.value
-                    ? 'border-accent bg-accent text-black shadow-lg shadow-accent/20'
+                    ? 'border-accent bg-accent text-black'
                     : 'border-white/10 text-white/50 hover:border-white/20 hover:text-white'
                 }`}
               >
@@ -152,7 +152,7 @@ export default function Community() {
             </p>
             <button
               onClick={() => setUploadOpen(true)}
-              className="mt-6 rounded-xl bg-accent px-6 py-2.5 text-sm font-black uppercase tracking-wider text-black shadow-lg shadow-accent/20 hover:brightness-110"
+              className="mt-6 bg-accent px-6 py-2.5 text-sm font-black uppercase tracking-wider text-black hover:brightness-110"
             >
               Upload First Garment
             </button>
@@ -192,7 +192,7 @@ function GarmentCard({ garment, onTryOn }: { garment: Garment; onTryOn: (g: Garm
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/8 bg-card/40 backdrop-blur-md transition-all duration-300 hover:border-white/15 hover:shadow-2xl hover:shadow-accent/5"
+      className="group relative flex flex-col overflow-hidden border border-white/10 bg-[#111111] transition-all duration-300 hover:border-accent/40"
     >
       {/* Thumbnail */}
       <div className="relative aspect-square overflow-hidden bg-black/30">
@@ -230,7 +230,7 @@ function GarmentCard({ garment, onTryOn }: { garment: Garment; onTryOn: (g: Garm
         )}
         <button
           onClick={() => onTryOn(garment)}
-          className="mt-auto w-full rounded-xl border border-accent/30 bg-accent/10 py-2.5 text-xs font-black uppercase tracking-wider text-accent transition-all hover:bg-accent hover:text-black hover:shadow-lg hover:shadow-accent/20"
+          className="mt-auto w-full border border-accent/30 bg-accent/10 py-2.5 text-xs font-black uppercase tracking-wider text-accent transition-all hover:bg-accent hover:text-black"
         >
           Try On →
         </button>
