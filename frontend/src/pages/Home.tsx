@@ -1,172 +1,178 @@
 import { Link } from 'react-router-dom';
-
 import heroImage from '@/Assets/heroimage.png';
-
-const storySections = [
-  {
-    eyebrow: 'The Gap We Noticed',
-    title: 'A picture never told the whole story.',
-    body:
-      'Every fashion site shows the same setup — a product photo, a generic size chart, and a model built nothing like you. For young men shopping online across Nepal, that disconnect runs even deeper.',
-  },
-  {
-    eyebrow: 'Under the Hood',
-    title: 'Real body. Real fit. Real time.',
-    body:
-      'Switch on your camera. The system reads your stance, your proportions, and your movement — then shapes the garment around you, not a mannequin built around someone else.',
-    bullets: ['Capture', 'Match', 'Preview'],
-  },
-  {
-    eyebrow: 'Made With You in Mind',
-    title: 'Designed for young men, 18 to 28, shopping online across Nepal.',
-    body:
-      'You are one of the most active online shoppers today — yet you have had the least influence over how that experience is built. This closes that gap around how you shop and who you are.',
-  },
-  {
-    eyebrow: 'What Changes',
-    title: 'Stop guessing. Start knowing.',
-    body:
-      'Fewer returns. Fewer surprises. A fitting room that actually reflects you — not a model, not a mannequin, not a stand-in for your body.',
-  },
-];
-
-const highlights = [
-  'Live fit previews before checkout',
-  'Cinematic, body-aware garment mapping',
-  'Built for the way young Nepal shops online',
-];
+import Footer from '../components/ui/Footer';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-bg text-offwhite">
-      <section className="relative isolate overflow-hidden border-b border-border/80">
-        <div className="absolute inset-0">
-          <img src={heroImage} alt="Young shopper exploring fashion" className="h-full w-full object-contain object-right lg:w-3/4 absolute right-0 p-8 lg:p-12" />
-          {/* Dark gradient strictly on the left for text readability, leaving the right side 100% clear */}
-          <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-bg/95 via-bg/60 to-transparent lg:w-2/3" />
+    <div className="min-h-screen bg-[#050505] text-white font-sans">
+
+      {/* HERO SECTION */}
+      <section className="relative min-h-[90vh] flex items-center pt-20 pb-20 border-b border-white/5">
+        <div className="absolute inset-0 overflow-hidden flex justify-end items-center right-0 z-0 opacity-40 lg:opacity-100">
+          {/* Placeholder for the mirror image - using the existing heroImage or a gradient box */}
+          <div className="w-1/2 h-[80%] relative mr-12 mt-12 hidden lg:flex items-center justify-center">
+            <div className="absolute inset-0 border-[4px] border-[#8B5CF6] shadow-[0_0_40px_rgba(139,92,246,0.3)] rounded-lg"></div>
+            <img src={heroImage} alt="Mirror" className="w-full h-full object-cover object-center rounded-sm opacity-50" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#050505] to-transparent z-10 w-1/3 left-0"></div>
+          </div>
         </div>
 
-        <div className="relative mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl flex-col justify-center px-4 py-16 sm:px-6 lg:px-8">
-          <div className="max-w-2xl pt-10">
-            <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/70">
-              The Future of Fashion
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full relative z-10">
+          <div className="max-w-xl">
+            <p className="text-xs font-bold tracking-widest text-[#8B5CF6] uppercase mb-6">
+              The Future of Shopping
             </p>
-            <h1 className="max-w-3xl font-display text-6xl leading-[1.1] text-white sm:text-7xl lg:text-[5.5rem] lg:leading-[1.05]">
-              Try It On.
-              <br />
-              Perfectly.
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.1] mb-6">
+              Try It On.<br />
+              <span className="text-[#8B5CF6]">Perfectly.</span>
             </h1>
-            <p className="mt-6 max-w-md text-base leading-relaxed text-white/80 sm:text-lg">
-              Advanced WebAR technology that delivers the most accurate virtual fitting experience.
+            <p className="text-gray-300 text-lg mb-10 max-w-md">
+              VirtuWear uses advanced AI to show you your perfect fit, before you buy.
             </p>
-            <div className="mt-10 flex flex-wrap items-center gap-6">
-              <Link
-                to="/tryon"
-                className="rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#6366F1] px-8 py-3 text-sm font-medium text-white transition-all duration-200 hover:opacity-90 shadow-[0_0_20px_rgba(139,92,246,0.4)]"
-              >
-                Try Now
+            <div className="flex items-center gap-6">
+              <Link to="/collections" className="bg-[#8B5CF6] hover:bg-[#7c3aed] text-white px-8 py-3 rounded-none font-medium transition-colors text-sm">
+                Explore Collections &rarr;
               </Link>
-              <Link
-                to="/how-it-works"
-                className="flex items-center gap-3 text-sm font-medium text-white transition-all duration-200 hover:text-white/80"
-              >
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 transition-colors hover:border-white/50">
-                  <svg className="ml-1 h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
+              <button className="flex items-center gap-3 text-sm font-medium hover:text-gray-300 transition-colors">
+                <span className="flex items-center justify-center w-10 h-10 border border-white/30 rounded-full">
+                  <svg className="w-3 h-3 ml-1 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                </span>
                 See How It Works
-              </Link>
-            </div>
-          </div>
-
-          <div className="mt-20 flex max-w-xl items-center divide-x divide-white/10 rounded-xl bg-black/20 p-6 backdrop-blur-sm border border-white/5">
-            <div className="flex-1 pr-6">
-              <p className="text-2xl font-semibold text-white">98.7%</p>
-              <p className="mt-1 text-xs font-medium text-white/60">Fit Accuracy</p>
-            </div>
-            <div className="flex-1 px-6">
-              <p className="text-2xl font-semibold text-white">Real-time</p>
-              <p className="mt-1 text-xs font-medium text-white/60">Body Tracking</p>
-            </div>
-            <div className="flex-1 pl-6">
-              <p className="text-2xl font-semibold text-white">AI</p>
-              <p className="mt-1 text-xs font-medium text-white/60">Fit Prediction</p>
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      <main className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-          <article className="border border-border/80 bg-offwhite p-8 text-bg">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-accent-dark">The Gap We Noticed</p>
-            <h2 className="mt-3 font-display text-3xl leading-tight sm:text-4xl">
-              A picture never told the whole story.
+      {/* SECTION 2: Nepali Men */}
+      <section className="relative py-24 border-b border-white/5 bg-[#0a0a0a]">
+        <div className="absolute inset-0 z-0 opacity-30 lg:opacity-60 flex justify-end">
+          <img src={heroImage} alt="Nepali Men" className="w-2/3 h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent"></div>
+        </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-xl">
+            <p className="text-xs font-bold tracking-widest text-[#8B5CF6] uppercase mb-4">
+              Built for Nepali Men
+            </p>
+            <h2 className="text-4xl sm:text-5xl font-bold leading-tight mb-6">
+              Look good.<br />
+              Buy once.<br />
+              Wear confidently.
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-bg/70">
-              Every fashion site shows the same setup — a product photo, a generic size chart, and a model built nothing like you. For young men shopping online across Nepal, that disconnect runs even deeper.
+            <p className="text-gray-400 text-base max-w-sm leading-relaxed">
+              Whether you're shopping for college, your first job, or a night out, VirtuWear helps you choose the right fit before you order.
             </p>
-            <p className="mt-4 text-base leading-relaxed text-bg/70">
-              So you size up, hope for the best, and often get it wrong — then deal with a return process that is more painful than just waiting.
-            </p>
-            <div className="mt-8 border-t border-bg/15 pt-6 text-[11px] font-semibold uppercase tracking-[0.3em] text-bg/60">
-              No more guessing games.
-            </div>
-          </article>
-
-          <div className="space-y-6">
-            {storySections.slice(1).map((section) => (
-              <article key={section.title} className="border border-border/80 bg-card/80 p-7">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-accent">{section.eyebrow}</p>
-                <h3 className="mt-3 font-display text-2xl leading-tight text-offwhite">{section.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/70">{section.body}</p>
-                {section.bullets && (
-                  <ul className="mt-5 space-y-2 text-sm text-white/75">
-                    {section.bullets.map((bullet) => (
-                      <li key={bullet} className="flex items-center gap-2">
-                        <span className="h-2 w-2 bg-accent" />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </article>
-            ))}
           </div>
         </div>
+      </section>
 
-        <section className="mt-16 border-t border-border/80 pt-12">
-          <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
-            <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-accent">A New Standard</p>
-              <h3 className="mt-3 font-display text-3xl leading-tight text-offwhite sm:text-4xl">
-                Structured, severe, and quietly luxurious.
-              </h3>
+      {/* SECTION 3: Sound Familiar */}
+      <section className="relative py-24 border-b border-white/5 bg-[#050505]">
+        <div className="absolute inset-0 z-0 opacity-30 lg:opacity-60 flex justify-start">
+          <img src={heroImage} alt="Stressed Shopper" className="w-1/2 h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-l from-[#050505] via-[#050505]/80 to-transparent"></div>
+        </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 flex justify-end">
+          <div className="max-w-md w-full">
+            <p className="text-xs font-bold tracking-widest text-[#8B5CF6] uppercase mb-4">
+              Sound Familiar?
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-bold leading-tight mb-6">
+              Ordered Medium.<br />
+              Got Medium.<br />
+              Still didn't fit.
+            </h2>
+            <div className="w-12 h-[2px] bg-[#8B5CF6] mb-6"></div>
+            <p className="text-gray-400 text-base mb-10">
+              That's because size charts don't know your body.
+            </p>
+            <Link to="/how-it-works" className="inline-block bg-[#8B5CF6] hover:bg-[#7c3aed] text-white px-8 py-3 rounded-none font-medium transition-colors text-sm">
+              See how VirtuWear fixes this &rarr;
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 4: How It Works */}
+      <section className="py-24 bg-white text-black">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-xs font-bold tracking-widest text-[#8B5CF6] uppercase mb-4">
+            How It Works
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-16">
+            Four simple steps
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 relative">
+            {/* Camera */}
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 mb-4 flex items-center justify-center">
+                <svg className="w-8 h-8 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <h3 className="font-bold text-lg mb-2">Open Camera</h3>
+              <p className="text-gray-600 text-sm max-w-[200px]">Use your phone camera. That's all you need.</p>
             </div>
-            <div className="grid gap-4 md:grid-cols-3">
-              {[
-                ['01', 'Monochrome discipline', 'A strict black, white, and gold system with no decorative excess.'],
-                ['02', 'Architectural rhythm', 'Sharp edges and deliberate spacing create a premium editorial feel.'],
-                ['03', 'Quiet motion', 'Minimal animation that feels precise rather than playful.'],
-              ].map(([number, title, copy]) => (
-                <div key={title} className="border border-border/80 bg-card/70 p-5">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-accent">{number}</p>
-                  <h4 className="mt-3 text-lg font-semibold text-offwhite">{title}</h4>
-                  <p className="mt-2 text-sm leading-relaxed text-white/65">{copy}</p>
-                </div>
-              ))}
+
+            {/* Stand Naturally */}
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 mb-4 flex items-center justify-center">
+                <svg className="w-8 h-8 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <h3 className="font-bold text-lg mb-2">Stand Naturally</h3>
+              <p className="text-gray-600 text-sm max-w-[200px]">We capture your real body measurements.</p>
+            </div>
+
+            {/* See Yourself */}
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 mb-4 flex items-center justify-center">
+                <svg className="w-8 h-8 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+              </div>
+              <h3 className="font-bold text-lg mb-2">See Yourself</h3>
+              <p className="text-gray-600 text-sm max-w-[200px]">Try on any outfit virtually in real-time.</p>
+            </div>
+
+            {/* Order */}
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 mb-4 flex items-center justify-center">
+                <svg className="w-8 h-8 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+              </div>
+              <h3 className="font-bold text-lg mb-2">Order</h3>
+              <p className="text-gray-600 text-sm max-w-[200px]">Buy with confidence. The right fit, every time.</p>
             </div>
           </div>
-        </section>
-      </main>
-
-      <footer className="border-t border-border/80 bg-bg/95 px-4 py-12 sm:px-6 lg:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/60 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-display text-xl text-offwhite">Nepal's fitting room, built around you.</p>
-          <p className="text-[11px] uppercase tracking-[0.3em] text-accent">Luxury fashion-tech, without the noise.</p>
         </div>
-      </footer>
+      </section>
+
+      {/* SECTION 5: Dress with Confidence */}
+      <section className="relative py-32 bg-[#111]">
+        <div className="absolute inset-0 z-0 opacity-40">
+          <img src={heroImage} alt="Dress Confidence" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-black/60"></div>
+        </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col justify-center h-full">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
+            Dress with <br />
+            <span className="text-[#8B5CF6]">confidence.</span>
+          </h2>
+          <p className="text-gray-300 text-lg">
+            Because the best outfit<br />
+            is the one that actually fits.
+          </p>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <Footer />
     </div>
   );
 }
