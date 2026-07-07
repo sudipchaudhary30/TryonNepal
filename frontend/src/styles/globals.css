@@ -24,7 +24,7 @@ body {
   min-height: 100vh;
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-family: 'Open Sans', 'Segoe UI', sans-serif;
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
 }
@@ -51,8 +51,15 @@ img {
   color: #ffffff;
 }
 
-.font-display {
-  font-family: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-display,
+.font-heading {
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
   font-weight: 600;
   letter-spacing: -0.03em;
 }

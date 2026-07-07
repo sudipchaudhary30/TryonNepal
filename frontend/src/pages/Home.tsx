@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import heroImage from '@/Assets/heroimage.jpg';
+import heroImage from '@/Assets/heroimage.png';
 
 const storySections = [
   {
@@ -41,51 +41,57 @@ export default function Home() {
     <div className="min-h-screen bg-bg text-offwhite">
       <section className="relative isolate overflow-hidden border-b border-border/80">
         <div className="absolute inset-0">
-          <img src={heroImage} alt="Young shopper exploring fashion" className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-bg/82" />
-          <div className="absolute inset-0 bg-gradient-to-r from-bg via-bg/90 to-bg/40" />
+          <img src={heroImage} alt="Young shopper exploring fashion" className="h-full w-full object-contain object-right lg:w-3/4 absolute right-0 p-8 lg:p-12" />
+          {/* Dark gradient strictly on the left for text readability, leaving the right side 100% clear */}
+          <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-bg/95 via-bg/60 to-transparent lg:w-2/3" />
         </div>
 
-        <div className="relative mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl flex-col justify-between px-4 py-16 sm:px-6 lg:px-8">
-          <div className="max-w-3xl pt-10">
-            <p className="mb-6 text-[10px] font-semibold uppercase tracking-[0.35em] text-accent">
-              Made For Nepal's Rising Generation
+        <div className="relative mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl flex-col justify-center px-4 py-16 sm:px-6 lg:px-8">
+          <div className="max-w-2xl pt-10">
+            <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/70">
+              The Future of Fashion
             </p>
-            <h1 className="max-w-3xl font-display text-5xl leading-[0.9] text-offwhite sm:text-6xl lg:text-7xl">
-              Try it on.
+            <h1 className="max-w-3xl font-display text-6xl leading-[1.1] text-white sm:text-7xl lg:text-[5.5rem] lg:leading-[1.05]">
+              Try It On.
               <br />
-              <span className="text-offwhite/90">Before it's yours.</span>
+              Perfectly.
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg">
-              A virtual fitting room built for how young Nepal actually shops. Stand in front of your camera and see the fit come to life — shaped around your body, live.
+            <p className="mt-6 max-w-md text-base leading-relaxed text-white/80 sm:text-lg">
+              Advanced WebAR technology that delivers the most accurate virtual fitting experience.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-10 flex flex-wrap items-center gap-6">
               <Link
                 to="/tryon"
-                className="border border-accent bg-accent px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-bg transition-all duration-200 hover:bg-accent/90"
+                className="rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#6366F1] px-8 py-3 text-sm font-medium text-white transition-all duration-200 hover:opacity-90 shadow-[0_0_20px_rgba(139,92,246,0.4)]"
               >
-                Start Now
+                Try Now
               </Link>
               <Link
-                to="/community"
-                className="border border-white/20 bg-transparent px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-offwhite transition-all duration-200 hover:border-accent hover:text-accent"
+                to="/how-it-works"
+                className="flex items-center gap-3 text-sm font-medium text-white transition-all duration-200 hover:text-white/80"
               >
-                See the community
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 transition-colors hover:border-white/50">
+                  <svg className="ml-1 h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+                See How It Works
               </Link>
             </div>
           </div>
 
-          <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-6 text-sm text-white/70 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.35em] text-accent">Now streaming</p>
-              <p className="mt-1 text-offwhite">Real-time fit preview, no guesswork.</p>
+          <div className="mt-20 flex max-w-xl items-center divide-x divide-white/10 rounded-xl bg-black/20 p-6 backdrop-blur-sm border border-white/5">
+            <div className="flex-1 pr-6">
+              <p className="text-2xl font-semibold text-white">98.7%</p>
+              <p className="mt-1 text-xs font-medium text-white/60">Fit Accuracy</p>
             </div>
-            <div className="flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.28em]">
-              {highlights.map((item) => (
-                <span key={item} className="border border-white/10 px-3 py-2 text-white/70">
-                  {item}
-                </span>
-              ))}
+            <div className="flex-1 px-6">
+              <p className="text-2xl font-semibold text-white">Real-time</p>
+              <p className="mt-1 text-xs font-medium text-white/60">Body Tracking</p>
+            </div>
+            <div className="flex-1 pl-6">
+              <p className="text-2xl font-semibold text-white">AI</p>
+              <p className="mt-1 text-xs font-medium text-white/60">Fit Prediction</p>
             </div>
           </div>
         </div>
