@@ -8,6 +8,15 @@ import { useWardrobe } from '@/hooks/useWardrobe';
 import { useWardrobeStore } from '@/store/useWardrobeStore';
 import type { Garment } from '@/types/garment';
 
+const CATEGORY_BADGE_COLORS: Record<string, string> = {
+  TOP: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+  BOTTOM: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+  DRESS: 'bg-pink-500/20 text-pink-300 border-pink-500/30',
+  OUTERWEAR: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
+  TRADITIONAL: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+  ACCESSORY: 'bg-teal-500/20 text-teal-300 border-teal-500/30',
+};
+
 export default function Wardrobe() {
   const { garments, isLoading, error, refetch } = useWardrobe();
   const selectedGarment = useWardrobeStore((state) => state.selectedGarment);
@@ -26,95 +35,133 @@ export default function Wardrobe() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="font-display text-4xl font-bold text-white">My Wardrobe</h1>
-          <p className="mt-2 text-white/60">{count} garment{count === 1 ? '' : 's'} available</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button onClick={() => setIsModalOpen(true)} className="bg-accent/20 text-accent hover:bg-accent hover:text-black">
-            + Add Garment
-          </Button>
-          <Button onClick={() => void refetch()} loading={isLoading}>
-            Refresh
-          </Button>
-        </div>
+    <div className="relative min-h-screen bg-[#0B1220] text-[#F5F1E8]" style={{ fontFamily: "'Manrope', sans-serif" }}>
+      {/* Background glows */}
+      <div className="pointer-events-none fixed top-0 left-0 w-full h-full overflow-hidden z-0">
+        <div className="absolute -top-40 left-1/4 h-96 w-96 rounded-full bg-[#C8102E]/8 blur-[120px]" />
+        <div className="absolute top-1/2 right-0 h-80 w-80 rounded-full bg-[#D4A017]/5 blur-[100px]" />
       </div>
 
-      <AddGarmentModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onSuccess={() => void refetch()} 
-      />
-
-      {error ? (
-        <p className="mb-4 rounded-2xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-          {error}
-        </p>
-      ) : null}
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {garments.map((garment) => {
-          const isSelected = selectedGarment?.id === garment.id;
-          const has3D = Boolean(garment.modelUrl);
-          return (
-            <article
-              key={garment.id}
-              className={`group flex flex-col overflow-hidden rounded-2xl border p-3 transition-all duration-200 ${
-                isSelected
-                  ? 'border-accent bg-accent/10 shadow-lg shadow-accent/10'
-                  : 'border-white/10 bg-card hover:border-white/20'
-              }`}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="h-2 w-2 rounded-full bg-[#D4A017] animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#D4A017]">Personal Space</span>
+            </div>
+            <h1 className="font-display text-4xl font-black text-[#F5F1E8] sm:text-5xl">My Wardrobe</h1>
+            <p className="mt-2 max-w-xl text-sm text-[#9AA3B5]">
+              Your private collection of garments. Upload custom pieces to try them on in real-time AR.
+            </p>
+            <div className="mt-3 flex items-center gap-3">
+              <span className="rounded-full border border-[#F5F1E8]/10 bg-[#131B2E]/50 px-3 py-1 text-xs text-[#9AA3B5]">
+                {count} garments saved
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center gap-2 bg-[#C8102E] px-6 py-3 text-sm font-bold uppercase tracking-wider text-[#F5F1E8] transition-all hover:brightness-110 hover:scale-[1.01]"
             >
-              {/* Thumbnail */}
-              <div className="relative aspect-square overflow-hidden rounded-xl bg-white/5">
-                <img
-                  src={garment.thumbnailUrl}
-                  alt={garment.name}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                {/* 3D badge */}
-                {has3D && (
-                  <span className="absolute right-2 top-2 rounded-full border border-accent/40 bg-black/70 px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-accent backdrop-blur-sm">
-                    3D
-                  </span>
-                )}
-              </div>
-
-              {/* Info */}
-              <div className="mt-3 flex-1">
-                <p className="truncate font-semibold text-white">{garment.name}</p>
-                <p className="text-xs uppercase tracking-[0.24em] text-white/50">{garment.category}</p>
-                {garment.price != null && (
-                  <p className="mt-1 text-sm font-bold text-accent">Rs. {garment.price}</p>
-                )}
-              </div>
-
-              {/* Try in AR button */}
-              <button
-                type="button"
-                onClick={() => handleTryInAR(garment)}
-                className={`mt-3 w-full rounded-xl py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
-                  isSelected
-                    ? 'bg-accent text-black shadow-md shadow-accent/20'
-                    : 'border border-white/10 bg-white/5 text-white/70 hover:border-accent/40 hover:bg-accent/10 hover:text-accent'
-                }`}
-              >
-                {isSelected ? '✓ Selected — View in AR' : 'Try in AR'}
-              </button>
-            </article>
-          );
-        })}
-      </div>
-
-      {garments.length === 0 && !isLoading && (
-        <div className="mt-16 text-center text-white/40">
-          <p className="text-4xl">👗</p>
-          <p className="mt-3 text-lg font-semibold">No garments yet</p>
-          <p className="text-sm">Garments will appear here once the backend is running.</p>
+              <span className="text-base">+</span> Add Garment
+            </button>
+            <button
+              onClick={() => void refetch()}
+              className="border border-[#F5F1E8]/10 bg-[#131B2E]/50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#9AA3B5] hover:border-[#F5F1E8]/20 hover:text-[#F5F1E8]"
+            >
+              Refresh
+            </button>
+          </div>
         </div>
-      )}
+
+        <AddGarmentModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          onSuccess={() => void refetch()} 
+        />
+
+        {error ? (
+          <p className="mb-6 rounded-none border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+            {error}
+          </p>
+        ) : null}
+
+        {garments.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-32 text-center">
+            <span className="text-6xl mb-4">👕</span>
+            <p className="text-xl font-bold text-[#F5F1E8]/70">No garments yet</p>
+            <p className="mt-2 text-sm text-[#9AA3B5] max-w-sm">
+              Your personal wardrobe is empty. Click "+ Add Garment" to upload your first personal piece.
+            </p>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="mt-6 bg-[#C8102E] px-6 py-2.5 text-sm font-bold uppercase tracking-wider text-[#F5F1E8] hover:brightness-110"
+            >
+              Add Garment
+            </button>
+          </div>
+        ) : (
+          <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {garments.map((garment) => {
+              const isSelected = selectedGarment?.id === garment.id;
+              const fileType = (garment as any).fileType ?? (garment.modelUrl ? '3D' : '2D');
+              const catColor = CATEGORY_BADGE_COLORS[garment.category] ?? 'bg-white/10 text-white/60 border-white/20';
+              
+              return (
+                <article
+                  key={garment.id}
+                  className={`group relative flex flex-col overflow-hidden border bg-[#131B2E] transition-all duration-300 ${
+                    isSelected
+                      ? 'border-[#D4A017] shadow-lg shadow-[#D4A017]/10'
+                      : 'border-[#F5F1E8]/10 hover:border-[#D4A017]/40'
+                  }`}
+                >
+                  {/* Thumbnail */}
+                  <div className="relative aspect-square overflow-hidden bg-black/30">
+                    <img
+                      src={garment.thumbnailUrl}
+                      alt={garment.name}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    {/* Badges */}
+                    <div className="absolute top-2 left-2 flex gap-1.5">
+                      <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${catColor}`}>
+                        {garment.category}
+                      </span>
+                      <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${fileType === '3D' ? 'border-purple-500/40 bg-purple-500/20 text-purple-300' : 'border-white/20 bg-white/10 text-white/60'}`}>
+                        {fileType}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Info */}
+                  <div className="flex flex-1 flex-col gap-3 p-4">
+                    <div>
+                      <h3 className="font-bold text-[#F5F1E8] line-clamp-1">{garment.name}</h3>
+                      <p className="text-xs text-[#9AA3B5] mt-0.5">{garment.brand || 'Personal Item'}</p>
+                    </div>
+                    {garment.price != null && (
+                      <p className="text-sm font-extrabold text-[#D4A017]">Rs. {garment.price}</p>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => handleTryInAR(garment)}
+                      className={`mt-auto w-full py-2.5 text-xs font-bold uppercase tracking-wider border transition-all ${
+                        isSelected
+                          ? 'border-[#D4A017] bg-[#D4A017]/10 text-[#D4A017] hover:bg-[#D4A017] hover:text-[#0B1220]'
+                          : 'border-[#C8102E]/30 bg-[#C8102E]/10 text-[#C8102E] hover:bg-[#C8102E] hover:text-[#F5F1E8]'
+                      }`}
+                    >
+                      {isSelected ? 'Selected ✓' : 'Try On →'}
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

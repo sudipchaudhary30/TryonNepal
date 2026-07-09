@@ -5,140 +5,73 @@ import shutil
 from datetime import datetime, timezone
 from uuid import uuid4
 
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Request
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
+
+from app.models.garment import Garment, GarmentCategory
+from app.utils.logger import logger
 
 router = APIRouter(prefix='/garments', tags=['garments'])
-
-CATALOG_TIMESTAMP = datetime.now(timezone.utc).isoformat()
 
 ALLOWED_IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.webp'}
 ALLOWED_MODEL_EXTENSIONS = {'.glb', '.gltf'}
 
-
-class GarmentItem(BaseModel):
-    id: str
-    userId: str
-    name: str
-    category: str
-    imageUrl: str
-    thumbnailUrl: str
-    modelUrl: str | None = None      # Path to .glb 3D model (optional)
-    fileType: str = '2D'             # '2D' or '3D'
-    isCustomDesign: bool
-    designData: dict[str, object] | None
-    brand: str | None
-    price: float | None
-    uploadedBy: str = 'Community'    # Display name of uploader
-    createdAt: str
-    updatedAt: str
-
-
-# In-memory store — all uploads land here and are visible to everyone
-COMMUNITY_GARMENTS: list[GarmentItem] = [
-    GarmentItem(
-        id='demo-himalayan-kurta',
-        userId='sample-user',
-        name='Himalayan Kurta',
-        category='TRADITIONAL',
-        imageUrl='/clothes/himalayan_kurta.png',
-        thumbnailUrl='/clothes/himalayan_kurta.png',
-        modelUrl=None,
-        fileType='2D',
-        isCustomDesign=False,
-        designData=None,
-        brand='AR TryOn Nepal',
-        price=2499,
-        uploadedBy='Heritage Collection',
-        createdAt=CATALOG_TIMESTAMP,
-        updatedAt=CATALOG_TIMESTAMP,
-    ),
-    GarmentItem(
-        id='demo-daura-suruwal',
-        userId='sample-user',
-        name='Daura Suruwal Heritage',
-        category='TRADITIONAL',
-        imageUrl='/clothes/daura_suruwal.png',
-        thumbnailUrl='/clothes/daura_suruwal.png',
-        modelUrl=None,
-        fileType='2D',
-        isCustomDesign=False,
-        designData=None,
-        brand='AR TryOn Nepal',
-        price=4299,
-        uploadedBy='Nepal Culture',
-        createdAt=CATALOG_TIMESTAMP,
-        updatedAt=CATALOG_TIMESTAMP,
-    ),
-    GarmentItem(
-        id='demo-sherwani',
-        userId='sample-user',
-        name='Kathmandu Sherwani Elite',
-        category='TRADITIONAL',
-        imageUrl='/clothes/sherwani.png',
-        thumbnailUrl='/clothes/sherwani.png',
-        modelUrl=None,
-        fileType='2D',
-        isCustomDesign=False,
-        designData=None,
-        brand='AR TryOn Nepal',
-        price=6899,
-        uploadedBy='Royal Studio',
-        createdAt=CATALOG_TIMESTAMP,
-        updatedAt=CATALOG_TIMESTAMP,
-    ),
-    GarmentItem(
-        id='demo-dhaka-set',
-        userId='sample-user',
-        name='Dhaka Festival Ensemble',
-        category='DRESS',
-        imageUrl='/clothes/dhaka_set.png',
-        thumbnailUrl='/clothes/dhaka_set.png',
-        modelUrl=None,
-        fileType='2D',
-        isCustomDesign=False,
-        designData=None,
-        brand='AR TryOn Nepal',
-        price=5199,
-        uploadedBy='Festival Fashion',
-        createdAt=CATALOG_TIMESTAMP,
-        updatedAt=CATALOG_TIMESTAMP,
-    ),
-    GarmentItem(
-        id='demo-oxford-shirt',
-        userId='sample-user',
-        name='Midnight Oxford Shirt',
-        category='TOP',
-        imageUrl='/clothes/oxford_shirt.png',
-        thumbnailUrl='/clothes/oxford_shirt.png',
-        modelUrl=None,
-        fileType='2D',
-        isCustomDesign=False,
-        designData=None,
-        brand='AR TryOn Nepal',
-        price=2199,
-        uploadedBy='Modern Wear',
-        createdAt=CATALOG_TIMESTAMP,
-        updatedAt=CATALOG_TIMESTAMP,
-    ),
-    GarmentItem(
-        id='demo-field-jacket',
-        userId='sample-user',
-        name='Peakline Field Jacket',
-        category='OUTERWEAR',
-        imageUrl='/clothes/field_jacket.png',
-        thumbnailUrl='/clothes/field_jacket.png',
-        modelUrl=None,
-        fileType='2D',
-        isCustomDesign=False,
-        designData=None,
-        brand='AR TryOn Nepal',
-        price=5899,
-        uploadedBy='Peakline',
-        createdAt=CATALOG_TIMESTAMP,
-        updatedAt=CATALOG_TIMESTAMP,
-    ),
+# Demo garments to seed on startup
+DEMO_GARMENTS_DATA = [
+    {
+        'name': 'Himalayan Kurta',
+        'category': GarmentCategory.TRADITIONAL,
+        'image_url': '/clothes/himalayan_kurta.png',
+        'thumbnail_url': '/clothes/himalayan_kurta.png',
+        'brand': 'AR TryOn Nepal',
+        'price': 2499,
+        'uploaded_by': 'Heritage Collection',
+    },
+    {
+        'name': 'Daura Suruwal Heritage',
+        'category': GarmentCategory.TRADITIONAL,
+        'image_url': '/clothes/daura_suruwal.png',
+        'thumbnail_url': '/clothes/daura_suruwal.png',
+        'brand': 'AR TryOn Nepal',
+        'price': 4299,
+        'uploaded_by': 'Nepal Culture',
+    },
+    {
+        'name': 'Kathmandu Sherwani Elite',
+        'category': GarmentCategory.TRADITIONAL,
+        'image_url': '/clothes/sherwani.png',
+        'thumbnail_url': '/clothes/sherwani.png',
+        'brand': 'AR TryOn Nepal',
+        'price': 6899,
+        'uploaded_by': 'Royal Studio',
+    },
+    {
+        'name': 'Dhaka Festival Ensemble',
+        'category': GarmentCategory.DRESS,
+        'image_url': '/clothes/dhaka_set.png',
+        'thumbnail_url': '/clothes/dhaka_set.png',
+        'brand': 'AR TryOn Nepal',
+        'price': 5199,
+        'uploaded_by': 'Festival Fashion',
+    },
+    {
+        'name': 'Midnight Oxford Shirt',
+        'category': GarmentCategory.TOP,
+        'image_url': '/clothes/oxford_shirt.png',
+        'thumbnail_url': '/clothes/oxford_shirt.png',
+        'brand': 'AR TryOn Nepal',
+        'price': 2199,
+        'uploaded_by': 'Modern Wear',
+    },
+    {
+        'name': 'Peakline Field Jacket',
+        'category': GarmentCategory.OUTERWEAR,
+        'image_url': '/clothes/field_jacket.png',
+        'thumbnail_url': '/clothes/field_jacket.png',
+        'brand': 'AR TryOn Nepal',
+        'price': 5899,
+        'uploaded_by': 'Peakline',
+    },
 ]
 
 
@@ -148,30 +81,75 @@ def _get_uploads_dir() -> str:
     return uploads_dir
 
 
-def serialize_garments() -> list[dict[str, object]]:
-    return [garment.model_dump() for garment in COMMUNITY_GARMENTS]
+async def seed_demo_garments() -> None:
+    """Seed demo garments into MongoDB on startup (only if empty)."""
+    try:
+        # Check if garments already exist
+        existing = await Garment.find_many(limit=1).to_list()
+        if len(existing) > 0:
+            logger.info('Garment catalog already populated')
+            return
+
+        logger.info('Seeding demo garments into MongoDB...')
+        for item in DEMO_GARMENTS_DATA:
+            garment = Garment(
+                user_id='demo-user',
+                name=item['name'],
+                category=item['category'],
+                image_url=item['image_url'],
+                thumbnail_url=item['thumbnail_url'],
+                brand=item.get('brand'),
+                price=item.get('price'),
+                uploaded_by=item.get('uploaded_by', 'Anonymous'),
+                is_custom_design=False,
+            )
+            await garment.insert()
+        
+        logger.info('Seeded %d demo garments', len(DEMO_GARMENTS_DATA))
+    except Exception as e:
+        logger.warning('Failed to seed demo garments: %s', e)
 
 
-def get_garment_by_id(garment_id: str) -> GarmentItem:
-    garment = next((item for item in COMMUNITY_GARMENTS if item.id == garment_id), None)
-    if garment is None:
+async def get_garment_by_id(garment_id: str) -> Garment:
+    """Fetch garment by MongoDB object ID."""
+    from bson import ObjectId
+    try:
+        garment = await Garment.get(ObjectId(garment_id))
+        if garment is None:
+            raise HTTPException(status_code=404, detail='Garment not found')
+        return garment
+    except Exception:
         raise HTTPException(status_code=404, detail='Garment not found')
-    return garment
 
 
 @router.get('/')
-def list_garments() -> dict[str, list[dict[str, object]]]:
-    """Return all community garments (newest first)."""
-    return {'items': list(reversed(serialize_garments()))}
+async def list_garments() -> dict[str, list[dict[str, object]]]:
+    """Return all garments from MongoDB (newest first)."""
+    try:
+        garments = await Garment.find_many().sort('created_at', -1).to_list()
+        return {'items': [garment.to_dict() for garment in garments]}
+    except Exception as e:
+        logger.error('Error fetching garments: %s', e)
+        # Fallback to empty list if MongoDB fails
+        return {'items': []}
 
 
 @router.get('/{garment_id}')
-def garment_detail(garment_id: str) -> dict[str, object]:
-    return get_garment_by_id(garment_id).model_dump()
+async def garment_detail(garment_id: str) -> dict[str, object]:
+    """Get a single garment by ID."""
+    try:
+        garment = await get_garment_by_id(garment_id)
+        return garment.to_dict()
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error('Error fetching garment %s: %s', garment_id, e)
+        raise HTTPException(status_code=404, detail='Garment not found')
 
 
 @router.post('/')
 async def upload_2d_garment(
+    request: Request,
     image: UploadFile = File(...),
     name: str = Form(...),
     category: str = Form(...),
@@ -180,44 +158,51 @@ async def upload_2d_garment(
     price: str = Form(default=''),
 ) -> dict[str, object]:
     """Upload a 2D clothing image (PNG/JPG/WEBP)."""
-    uploads_dir = _get_uploads_dir()
+    try:
+        uploads_dir = _get_uploads_dir()
 
-    ext = os.path.splitext(image.filename or '')[1].lower()
-    if ext not in ALLOWED_IMAGE_EXTENSIONS:
-        raise HTTPException(status_code=400, detail=f'Invalid file type. Allowed: {ALLOWED_IMAGE_EXTENSIONS}')
+        ext = os.path.splitext(image.filename or '')[1].lower()
+        if ext not in ALLOWED_IMAGE_EXTENSIONS:
+            raise HTTPException(status_code=400, detail=f'Invalid file type. Allowed: {ALLOWED_IMAGE_EXTENSIONS}')
 
-    new_filename = f"{uuid4()}{ext}"
-    file_path = os.path.join(uploads_dir, new_filename)
+        new_filename = f"{uuid4()}{ext}"
+        file_path = os.path.join(uploads_dir, new_filename)
 
-    with open(file_path, 'wb') as buffer:
-        shutil.copyfileobj(image.file, buffer)
+        with open(file_path, 'wb') as buffer:
+            shutil.copyfileobj(image.file, buffer)
 
-    image_url = f'/uploads/{new_filename}'
+        image_url = f'/uploads/{new_filename}'
+        
+        # Get userId from request (from auth header if available, otherwise use user-specific ID)
+        user_id = getattr(request.state, 'user_id', None) or f'anon-{uuid4()}'
 
-    new_garment = GarmentItem(
-        id=f'garment-2d-{uuid4()}',
-        userId='community-user',
-        name=name,
-        category=category.upper(),
-        imageUrl=image_url,
-        thumbnailUrl=image_url,
-        modelUrl=None,
-        fileType='2D',
-        isCustomDesign=True,
-        designData=None,
-        brand=brand or None,
-        price=float(price) if price else None,
-        uploadedBy=uploadedBy or 'Anonymous',
-        createdAt=datetime.now(timezone.utc).isoformat(),
-        updatedAt=datetime.now(timezone.utc).isoformat(),
-    )
-
-    COMMUNITY_GARMENTS.append(new_garment)
-    return new_garment.model_dump()
+        # Create and insert into MongoDB
+        new_garment = Garment(
+            user_id=user_id,
+            name=name,
+            category=GarmentCategory(category.upper()),
+            image_url=image_url,
+            thumbnail_url=image_url,
+            model_url=None,
+            file_type='2D',
+            is_custom_design=True,
+            brand=brand or None,
+            price=float(price) if price else None,
+            uploaded_by=uploadedBy or 'Anonymous',
+        )
+        
+        await new_garment.insert()
+        return new_garment.to_dict()
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error('Error uploading 2D garment: %s', e)
+        raise HTTPException(status_code=500, detail=f'Upload failed: {str(e)}')
 
 
 @router.post('/upload-3d')
 async def upload_3d_garment(
+    request: Request,
     model: UploadFile = File(...),
     image: UploadFile = File(...),
     name: str = Form(...),
@@ -227,61 +212,71 @@ async def upload_3d_garment(
     price: str = Form(default=''),
 ) -> dict[str, object]:
     """Upload a 3D clothing model (.glb) with a preview image thumbnail."""
-    uploads_dir = _get_uploads_dir()
+    try:
+        uploads_dir = _get_uploads_dir()
 
-    # Validate 3D model file
-    model_ext = os.path.splitext(model.filename or '')[1].lower()
-    if model_ext not in ALLOWED_MODEL_EXTENSIONS:
-        raise HTTPException(status_code=400, detail=f'Invalid model type. Allowed: {ALLOWED_MODEL_EXTENSIONS}')
+        # Validate 3D model file
+        model_ext = os.path.splitext(model.filename or '')[1].lower()
+        if model_ext not in ALLOWED_MODEL_EXTENSIONS:
+            raise HTTPException(status_code=400, detail=f'Invalid model type. Allowed: {ALLOWED_MODEL_EXTENSIONS}')
 
-    # Validate thumbnail image
-    img_ext = os.path.splitext(image.filename or '')[1].lower()
-    if img_ext not in ALLOWED_IMAGE_EXTENSIONS:
-        raise HTTPException(status_code=400, detail=f'Invalid thumbnail type. Allowed: {ALLOWED_IMAGE_EXTENSIONS}')
+        # Validate thumbnail image
+        img_ext = os.path.splitext(image.filename or '')[1].lower()
+        if img_ext not in ALLOWED_IMAGE_EXTENSIONS:
+            raise HTTPException(status_code=400, detail=f'Invalid thumbnail type. Allowed: {ALLOWED_IMAGE_EXTENSIONS}')
 
-    # Save model file
-    model_filename = f"{uuid4()}{model_ext}"
-    model_path = os.path.join(uploads_dir, model_filename)
-    with open(model_path, 'wb') as buffer:
-        shutil.copyfileobj(model.file, buffer)
+        # Save model file
+        model_filename = f"{uuid4()}{model_ext}"
+        model_path = os.path.join(uploads_dir, model_filename)
+        with open(model_path, 'wb') as buffer:
+            shutil.copyfileobj(model.file, buffer)
 
-    # Save thumbnail
-    img_filename = f"{uuid4()}{img_ext}"
-    img_path = os.path.join(uploads_dir, img_filename)
-    with open(img_path, 'wb') as buffer:
-        shutil.copyfileobj(image.file, buffer)
+        # Save thumbnail
+        img_filename = f"{uuid4()}{img_ext}"
+        img_path = os.path.join(uploads_dir, img_filename)
+        with open(img_path, 'wb') as buffer:
+            shutil.copyfileobj(image.file, buffer)
 
-    model_url = f'/uploads/{model_filename}'
-    image_url = f'/uploads/{img_filename}'
+        model_url = f'/uploads/{model_filename}'
+        image_url = f'/uploads/{img_filename}'
+        
+        # Get userId from request (from auth header if available, otherwise use user-specific ID)
+        user_id = getattr(request.state, 'user_id', None) or f'anon-{uuid4()}'
 
-    new_garment = GarmentItem(
-        id=f'garment-3d-{uuid4()}',
-        userId='community-user',
-        name=name,
-        category=category.upper(),
-        imageUrl=image_url,
-        thumbnailUrl=image_url,
-        modelUrl=model_url,
-        fileType='3D',
-        isCustomDesign=True,
-        designData=None,
-        brand=brand or None,
-        price=float(price) if price else None,
-        uploadedBy=uploadedBy or 'Anonymous',
-        createdAt=datetime.now(timezone.utc).isoformat(),
-        updatedAt=datetime.now(timezone.utc).isoformat(),
-    )
-
-    COMMUNITY_GARMENTS.append(new_garment)
-    return new_garment.model_dump()
+        # Create and insert into MongoDB
+        new_garment = Garment(
+            user_id=user_id,
+            name=name,
+            category=GarmentCategory(category.upper()),
+            image_url=image_url,
+            thumbnail_url=image_url,
+            model_url=model_url,
+            file_type='3D',
+            is_custom_design=True,
+            brand=brand or None,
+            price=float(price) if price else None,
+            uploaded_by=uploadedBy or 'Anonymous',
+        )
+        
+        await new_garment.insert()
+        return new_garment.to_dict()
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error('Error uploading 3D garment: %s', e)
+        raise HTTPException(status_code=500, detail=f'Upload failed: {str(e)}')
 
 
 @router.delete('/{garment_id}')
-def delete_garment(garment_id: str) -> dict[str, str]:
-    """Remove a garment from the community store."""
-    global COMMUNITY_GARMENTS
-    original_len = len(COMMUNITY_GARMENTS)
-    COMMUNITY_GARMENTS = [g for g in COMMUNITY_GARMENTS if g.id != garment_id]
-    if len(COMMUNITY_GARMENTS) == original_len:
+async def delete_garment(garment_id: str) -> dict[str, str]:
+    """Remove a garment from MongoDB."""
+    try:
+        garment = await get_garment_by_id(garment_id)
+        await garment.delete()
+        return {'status': 'deleted', 'id': garment_id}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error('Error deleting garment %s: %s', garment_id, e)
         raise HTTPException(status_code=404, detail='Garment not found')
-    return {'status': 'deleted', 'id': garment_id}
+

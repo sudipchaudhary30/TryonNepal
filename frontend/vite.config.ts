@@ -16,6 +16,14 @@ export default defineConfig({
       'Cross-Origin-Opener-Policy': 'same-origin',
       'Cross-Origin-Embedder-Policy': 'require-corp',
     },
+    proxy: {
+      // Auth routes → Node server (port 4000)
+      '/api/auth': { target: 'http://127.0.0.1:4000', changeOrigin: true },
+      '/api/users': { target: 'http://127.0.0.1:4000', changeOrigin: true },
+      // Garment, tryon, design routes → Python FastAPI (port 8000)
+      '/api': { target: 'http://127.0.0.1:8000', changeOrigin: true },
+      '/uploads': { target: 'http://127.0.0.1:8000', changeOrigin: true },
+    },
   },
   build: {
     rollupOptions: {

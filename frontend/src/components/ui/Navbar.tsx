@@ -40,14 +40,18 @@
 // }
 
 import { Link, NavLink } from 'react-router-dom';
-
-const navItems = [
-  { to: '/', label: 'Home' },
-  { to: '/tryon', label: 'Try-On' },
-  { to: '/community', label: 'Community' },
-];
+import { useUserStore } from '@/store/useUserStore';
 
 export default function Navbar() {
+  const { isAuthenticated, user, signOut } = useUserStore();
+
+  const navItems = [
+    { to: '/', label: 'Home' },
+    { to: '/tryon', label: 'Try-On' },
+    { to: '/community', label: 'Community' },
+    ...(isAuthenticated ? [{ to: '/wardrobe', label: 'Wardrobe' }] : []),
+  ];
+
   return (
     <header className="sticky top-0 z-50 border-b border-[#F5F1E8]/10 bg-[#0B1220]/90 backdrop-blur-md">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -74,13 +78,30 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-6">
-          <Link
-            to="/register"
-            className="rounded-full bg-[#C8102E] px-6 py-2.5 text-sm font-bold text-[#F5F1E8] transition-transform hover:scale-[1.03]"
-          >
-            Register
-          </Link>
+        <div className="flex items-center gap-4">
+          {isAuthenticated ? (
+            <div className="flex items-center gap-4">
+              <Link
+                to="/profile"
+                className="font-mono-label text-xs uppercase tracking-widest text-[#9AA3B5] hover:text-[#F5F1E8] transition-colors"
+              >
+                Profile ({user?.name || 'User'})
+              </Link>
+              <button
+                onClick={() => void signOut()}
+                className="rounded-none border border-[#F5F1E8]/10 bg-transparent px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#9AA3B5] hover:border-[#C8102E] hover:text-[#C8102E] transition-all"
+              >
+                Log Out
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/register"
+              className="rounded-none bg-[#C8102E] px-6 py-2.5 text-sm font-bold text-[#F5F1E8] transition-transform hover:scale-[1.03]"
+            >
+              Register
+            </Link>
+          )}
         </div>
       </div>
     </header>

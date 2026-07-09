@@ -289,6 +289,7 @@ import { Link } from 'react-router-dom';
 import { garmentApi } from '@/lib/api';
 import type { Garment } from '@/types/garment';
 import Footer from '../components/ui/Footer';
+import heroBg from '@/Assets/herobg_new.jpg';
 
 /* ------------------------------------------------------------------ */
 /*  Dhaka-weave divider — the page's one signature motif.              */
@@ -389,74 +390,58 @@ export default function Home() {
       {/* ---------------------------------------------------------------- */}
       {/* HERO                                                              */}
       {/* ---------------------------------------------------------------- */}
-      <section className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 pb-20 pt-28 lg:grid-cols-2 lg:gap-8 lg:px-8">
-        <div className="flex flex-col justify-center">
-          <p className="font-mono-label text-[11px] uppercase tracking-[0.3em] text-[#D4A017]">
-            Live AR Fitting &mdash; Kathmandu
-          </p>
-          <h1 className="font-display mt-5 text-5xl font-semibold leading-[1.05] sm:text-6xl">
-            See it on.
-            <br />
-            <span className="text-[#C8102E]">Before</span> you buy it.
-          </h1>
-          <p className="mt-6 max-w-md text-base leading-relaxed text-[#9AA3B5]">
-            Point your camera. Watch a Dhaka-print kurta or a daura suruwal drape onto your
-            own shoulders, in real time, entirely on your device. No account, no upload,
-            no guesswork.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center gap-4">
-            <Link
-              to="/tryon"
-              className="rounded-full bg-[#C8102E] px-8 py-3.5 text-sm font-bold text-[#F5F1E8] transition-transform hover:scale-[1.03]"
-            >
-              Launch Try-On Room
-            </Link>
-            <Link
-              to="/wardrobe"
-              className="rounded-full border border-[#F5F1E8]/15 px-8 py-3.5 text-sm font-semibold text-[#F5F1E8] transition-colors hover:border-[#F5F1E8]/40"
-            >
-              Browse Wardrobe
-            </Link>
-          </div>
+      <section 
+        className="relative w-full bg-cover bg-no-repeat overflow-hidden"
+        style={{ backgroundImage: `url(${heroBg})`, backgroundPosition: '80% center' }}
+      >
+        {/* Gradient overlay: fully solid dark over left text, then smooth fade to reveal the shifted jacket image */}
+        <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#0B1220] via-[#0B1220] via-45% to-transparent z-0 w-[60%]" />
 
-          <div className="mt-12 flex gap-10 border-t border-[#F5F1E8]/10 pt-6 font-mono-label text-xs text-[#9AA3B5]">
-            <div>
-              <span className="block text-xl font-bold text-[#F5F1E8]">0%</span>
-              data leaves device
+        <div className="relative z-10 mx-auto max-w-7xl px-6 pb-20 pt-28">
+          <div className="flex flex-col items-start justify-center text-left max-w-3xl">
+            <p className="font-mono-label text-[11px] uppercase tracking-[0.3em] text-[#D4A017]">
+              Live AR Fitting &mdash; Kathmandu
+            </p>
+            <h1 className="font-display mt-5 text-5xl font-semibold leading-[1.05] sm:text-6xl text-left">
+              See it on.
+              <br />
+              <span className="text-[#C8102E]">Before</span> you buy it.
+            </h1>
+            <p className="mt-6 max-w-md text-base leading-relaxed text-[#9AA3B5] text-left">
+              Point your camera. Watch a daura suruwal drape onto your
+              own shoulders, in real time, entirely on your device. No account, no upload,
+              no guesswork.
+            </p>
+            <div className="mt-9 flex flex-wrap items-center gap-4">
+              <Link
+                to="/tryon"
+                className="rounded-none bg-[#C8102E] px-8 py-3.5 text-sm font-bold text-[#F5F1E8] transition-transform hover:scale-[1.03]"
+              >
+                Launch Try-On Room
+              </Link>
+              <Link
+                to="/wardrobe"
+                className="rounded-none border border-[#F5F1E8]/15 px-8 py-3.5 text-sm font-semibold text-[#F5F1E8] transition-colors hover:border-[#F5F1E8]/40"
+              >
+                Browse Wardrobe
+              </Link>
             </div>
-            <div>
-              <span className="block text-xl font-bold text-[#D4A017]">60fps</span>
-              pose tracking
-            </div>
-            <div>
-              <span className="block text-xl font-bold text-[#F5F1E8]">&lt;2s</span>
-              to first fit
-            </div>
-          </div>
-        </div>
 
-        <div ref={heroRef} className="flex items-center justify-center">
-          <ViewfinderFrame>
-            <div className="relative h-[420px] w-[320px] overflow-hidden rounded-sm bg-[#131B2E] sm:h-[480px] sm:w-[360px]">
-              {wardrobe[0]?.thumbnailUrl ? (
-                <img
-                  src={wardrobe[0].thumbnailUrl}
-                  alt={wardrobe[0].name}
-                  className="h-full w-full object-cover opacity-90"
-                />
-              ) : (
-                <div className="h-full w-full bg-gradient-to-b from-[#1B2740] to-[#0B1220]" />
-              )}
-              {/* drifting tracking reticle */}
-              <div
-                className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[#D4A017] transition-all duration-[2600ms] ease-in-out"
-                style={{ left: `${reticlePos.x}%`, top: `${reticlePos.y}%` }}
-              />
-              <div className="absolute bottom-3 left-3 font-mono-label text-[10px] uppercase tracking-widest text-[#D4A017]">
-                tracking &middot; live
+            <div className="mt-12 flex gap-10 border-t border-[#F5F1E8]/10 pt-6 font-mono-label text-xs text-[#9AA3B5]">
+              <div>
+                <span className="block text-xl font-bold text-[#F5F1E8]">0%</span>
+                data leaves device
+              </div>
+              <div>
+                <span className="block text-xl font-bold text-[#D4A017]">60fps</span>
+                pose tracking
+              </div>
+              <div>
+                <span className="block text-xl font-bold text-[#F5F1E8]">&lt;2s</span>
+                to first fit
               </div>
             </div>
-          </ViewfinderFrame>
+          </div>
         </div>
       </section>
 
@@ -546,7 +531,7 @@ export default function Home() {
         </h2>
         <Link
           to="/tryon"
-          className="mt-10 inline-block rounded-full bg-[#C8102E] px-10 py-4 text-sm font-bold text-[#F5F1E8] transition-transform hover:scale-[1.03]"
+          className="mt-10 inline-block rounded-none bg-[#C8102E] px-10 py-4 text-sm font-bold text-[#F5F1E8] transition-transform hover:scale-[1.03]"
         >
           Launch Try-On Room
         </Link>

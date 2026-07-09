@@ -109,8 +109,15 @@ export function useBodyTracker(
     const shoulderCY    = (lsY + rsY) / 2;
 
     // Neck anchor: sits above shoulder midpoint.
-    // Factor 0.24 = ~empirically tuned for kurta/shirt collar alignment.
-    const neckY = shoulderCY - shoulderWidth * 0.24;
+    // We track the nose (head) as well to locate the true mid-neck line.
+    // If nose is visible, neck is ~40% of the way from shoulder midpoint up to the nose.
+    // Otherwise, we fall back to a shoulder-width based offset.
+    let neckY = shoulderCY - shoulderWidth * 0.12;
+    if (vis(ns, 0.4)) {
+      const noseY = py(ns);
+      // Place it at 60% shoulderCY + 40% noseY (moving up from shoulders towards head)
+      neckY = shoulderCY * 0.60 + noseY * 0.40;
+    }
 
     // ── Hips ───────────────────────────────────────────────────────────────
     let hipCX: number;

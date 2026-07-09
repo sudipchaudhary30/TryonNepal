@@ -246,13 +246,9 @@ export default function Register() {
   }, [slides.length]);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/profile', { replace: true });
-      return;
-    }
-
+    // Only fetch initial authentication state if needed, but do not auto-redirect on mount
     void initAuth();
-  }, [initAuth, isAuthenticated, navigate]);
+  }, [initAuth]);
 
   const strength = useMemo(() => passwordStrength(password), [password]);
 
@@ -287,7 +283,7 @@ export default function Register() {
 
     try {
       await signUp(email.trim(), password, name.trim());
-      navigate('/profile', { replace: true });
+      navigate('/wardrobe', { replace: true });
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : 'Registration failed.');
     }
@@ -312,12 +308,12 @@ export default function Register() {
 
       <div className="mx-auto flex min-h-screen max-w-6xl items-center px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid w-full gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <section className="relative flex flex-col overflow-hidden rounded-lg border border-[#F5F1E8]/10 bg-[#131B2E] p-4 sm:p-5">
+          <section className="relative flex flex-col overflow-hidden rounded-none border border-[#F5F1E8]/10 bg-[#131B2E] p-4 sm:p-5">
             <p className="font-mono-label px-2 pt-2 text-[10px] uppercase tracking-[0.35em] text-[#D4A017]">
               The Wardrobe
             </p>
 
-            <div className="relative mt-4 aspect-[4/5] w-full overflow-hidden rounded-md bg-black/20">
+            <div className="relative mt-4 aspect-[4/5] w-full overflow-hidden rounded-none bg-black/20">
               {slides.map((garment, i) => (
                 <img
                   key={garment.id}
@@ -354,15 +350,15 @@ export default function Register() {
                   type="button"
                   aria-label={`Show ${garment.name}`}
                   onClick={() => setSlideIndex(i)}
-                  className={`h-1.5 rounded-full transition-all ${
-                    i === slideIndex ? 'w-6 bg-[#D4A017]' : 'w-1.5 bg-[#F5F1E8]/20'
+                  className={`h-1.5 transition-all ${
+                    i === slideIndex ? 'w-6 bg-[#D4A017] rounded-none' : 'w-1.5 bg-[#F5F1E8]/20 rounded-none'
                   }`}
                 />
               ))}
             </div>
           </section>
 
-          <section className="rounded-lg border border-[#F5F1E8]/10 bg-[#131B2E] p-6 sm:p-8">
+          <section className="rounded-none border border-[#F5F1E8]/10 bg-[#131B2E] p-6 sm:p-8">
             <p className="font-mono-label text-[10px] uppercase tracking-[0.35em] text-[#D4A017]">
               Register
             </p>
@@ -370,7 +366,7 @@ export default function Register() {
 
             <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
               {error ? (
-                <p className="rounded-md border border-[#C8102E]/30 bg-[#C8102E]/10 px-4 py-3 text-sm text-[#F5B8C0]">
+                <p className="rounded-none border border-[#C8102E]/30 bg-[#C8102E]/10 px-4 py-3 text-sm text-[#F5B8C0]">
                   {error}
                 </p>
               ) : null}
@@ -383,7 +379,7 @@ export default function Register() {
                   id="register-name"
                   value={name}
                   onChange={(event) => setName(event.target.value)}
-                  className="w-full rounded-md border border-[#F5F1E8]/10 bg-black/30 px-4 py-3 text-[#F5F1E8] outline-none transition focus:border-[#D4A017]"
+                  className="w-full rounded-none border border-[#F5F1E8]/10 bg-black/30 px-4 py-3 text-[#F5F1E8] outline-none transition focus:border-[#D4A017]"
                   placeholder="Name Surname"
                 />
               </div>
@@ -397,7 +393,7 @@ export default function Register() {
                   type="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  className="w-full rounded-md border border-[#F5F1E8]/10 bg-black/30 px-4 py-3 text-[#F5F1E8] outline-none transition focus:border-[#D4A017]"
+                  className="w-full rounded-none border border-[#F5F1E8]/10 bg-black/30 px-4 py-3 text-[#F5F1E8] outline-none transition focus:border-[#D4A017]"
                   placeholder="you@example.com"
                 />
               </div>
@@ -411,14 +407,14 @@ export default function Register() {
                   type="password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
-                  className="w-full rounded-md border border-[#F5F1E8]/10 bg-black/30 px-4 py-3 text-[#F5F1E8] outline-none transition focus:border-[#D4A017]"
+                  className="w-full rounded-none border border-[#F5F1E8]/10 bg-black/30 px-4 py-3 text-[#F5F1E8] outline-none transition focus:border-[#D4A017]"
                   placeholder="••••••••"
                 />
                 <div className="mt-3 flex gap-1">
                   {[1, 2, 3, 4].map((bar) => (
                     <span
                       key={bar}
-                      className={`h-1.5 flex-1 rounded-full ${
+                      className={`h-1.5 flex-1 rounded-none ${
                         bar <= strength ? 'bg-[#D4A017]' : 'bg-[#F5F1E8]/10'
                       }`}
                     />
@@ -435,22 +431,22 @@ export default function Register() {
                   type="password"
                   value={confirmPassword}
                   onChange={(event) => setConfirmPassword(event.target.value)}
-                  className="w-full rounded-md border border-[#F5F1E8]/10 bg-black/30 px-4 py-3 text-[#F5F1E8] outline-none transition focus:border-[#D4A017]"
+                  className="w-full rounded-none border border-[#F5F1E8]/10 bg-black/30 px-4 py-3 text-[#F5F1E8] outline-none transition focus:border-[#D4A017]"
                   placeholder="••••••••"
                 />
               </div>
 
-              <label className="flex items-center gap-3 rounded-md border border-[#F5F1E8]/10 bg-black/20 px-4 py-3 text-sm text-[#9AA3B5]">
+              <label className="flex items-center gap-3 rounded-none border border-[#F5F1E8]/10 bg-black/20 px-4 py-3 text-sm text-[#9AA3B5]">
                 <input
                   type="checkbox"
                   checked={agree}
                   onChange={(event) => setAgree(event.target.checked)}
-                  className="h-4 w-4 rounded border-[#F5F1E8]/20 bg-transparent text-[#D4A017] focus:ring-[#D4A017]"
+                  className="h-4 w-4 rounded-none border-[#F5F1E8]/20 bg-transparent text-[#D4A017] focus:ring-[#D4A017]"
                 />
                 I agree to the privacy policy.
               </label>
 
-              <Button loading={isLoading} className="w-full !rounded-full !bg-[#C8102E] hover:!bg-[#a80d26]" type="submit">
+              <Button loading={isLoading} className="w-full !rounded-none !bg-[#C8102E] hover:!bg-[#a80d26]" type="submit">
                 Create Account
               </Button>
             </form>

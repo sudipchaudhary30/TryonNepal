@@ -13,6 +13,7 @@ const sharedMeta = {
 } as const;
 
 export const demoGarments: Garment[] = [
+  // ── Traditional ───────────────────────────────────────────────────────────
   {
     id: 'demo-himalayan-kurta',
     name: 'Himalayan Kurta',
@@ -43,16 +44,40 @@ export const demoGarments: Garment[] = [
     uploadedBy: 'Royal Studio',
     ...sharedMeta,
   },
+
+  // ── Outerwear / Jackets ───────────────────────────────────────────────────
   {
-    id: 'demo-dhaka-set',
-    name: 'Dhaka Festival Ensemble',
-    category: GarmentCategory.DRESS,
-    imageUrl: '/clothes/dhaka_set.png',
-    thumbnailUrl: '/clothes/dhaka_set.png',
+    id: 'demo-field-jacket',
+    name: 'Peakline Field Jacket',
+    category: GarmentCategory.OUTERWEAR,
+    imageUrl: '/clothes/field_jacket.png',
+    thumbnailUrl: '/clothes/field_jacket.png',
     fileType: '2D',
-    uploadedBy: 'Festival Fashion',
+    uploadedBy: 'Peakline',
     ...sharedMeta,
   },
+  {
+    id: 'demo-navy-blazer',
+    name: 'Kathmandu Navy Blazer',
+    category: GarmentCategory.OUTERWEAR,
+    imageUrl: '/clothes/navy_blazer.png',
+    thumbnailUrl: '/clothes/navy_blazer.png',
+    fileType: '2D',
+    uploadedBy: 'Modern Wear',
+    ...sharedMeta,
+  },
+  {
+    id: 'demo-leather-jacket',
+    name: 'Midnight Leather Jacket',
+    category: GarmentCategory.OUTERWEAR,
+    imageUrl: '/clothes/leather_jacket.png',
+    thumbnailUrl: '/clothes/leather_jacket.png',
+    fileType: '2D',
+    uploadedBy: 'Urban Edge',
+    ...sharedMeta,
+  },
+
+  // ── Tops ──────────────────────────────────────────────────────────────────
   {
     id: 'demo-oxford-shirt',
     name: 'Midnight Oxford Shirt',
@@ -64,13 +89,26 @@ export const demoGarments: Garment[] = [
     ...sharedMeta,
   },
   {
-    id: 'demo-field-jacket',
-    name: 'Peakline Field Jacket',
-    category: GarmentCategory.OUTERWEAR,
-    imageUrl: '/clothes/field_jacket.png',
-    thumbnailUrl: '/clothes/field_jacket.png',
+    id: 'demo-hoodie-men',
+    name: 'Urban Grey Hoodie',
+    category: GarmentCategory.TOP,
+    imageUrl: '/clothes/hoodie_grey.png',
+    thumbnailUrl: '/clothes/hoodie_grey.png',
+    modelUrl: '/clothes/models/hoodie.glb',  // 14MB real GLB — kept for 3D demo as requested
+    fileType: '3D',
+    uploadedBy: 'Street Culture',
+    ...sharedMeta,
+  },
+
+  // ── Bottoms ───────────────────────────────────────────────────────────────
+  {
+    id: 'demo-chino-pants',
+    name: 'Slim Khaki Chinos',
+    category: GarmentCategory.BOTTOM,
+    imageUrl: '/clothes/chino_pants.png',
+    thumbnailUrl: '/clothes/chino_pants.png',
     fileType: '2D',
-    uploadedBy: 'Peakline',
+    uploadedBy: 'Modern Wear',
     ...sharedMeta,
   },
 ];

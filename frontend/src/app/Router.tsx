@@ -6,6 +6,7 @@ import Community from '@/pages/Community';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Profile from '@/pages/Profile';
+import Wardrobe from '@/pages/Wardrobe';
 
 export default function Router() {
   return (
@@ -14,6 +15,7 @@ export default function Router() {
         <Route path="/" element={<Home />} />
         <Route path="/tryon" element={<TryOn />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/wardrobe" element={<Wardrobe />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />

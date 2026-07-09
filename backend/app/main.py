@@ -12,7 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from app.api.routes.designs import router as designs_router
-from app.api.routes.garments import get_garment_by_id, router as garments_router, serialize_garments
+from app.api.routes.garments import router as garments_router, seed_demo_garments
 from app.api.routes.tryon import router as tryon_router
 from app.api.routes.users import router as users_router
 from app.config import get_settings
@@ -45,6 +45,8 @@ async def lifespan(app: FastAPI):
     global _model_loaded, _device
     # Connect to MongoDB
     await connect_db()
+    # Seed demo garments into MongoDB
+    await seed_demo_garments()
     await load_engine_on_startup()
     engine = TryOnEngine.get_instance()
     _device = engine.device
@@ -82,21 +84,37 @@ app.mount('/uploads', StaticFiles(directory=uploads_dir), name='uploads')
 
 
 @app.get('/garments')
-def public_garments() -> dict[str, list[dict[str, object]]]:
-    return {'items': serialize_garments()}
+async def public_garments() -> dict[str, list[dict[str, object]]]:
+    """Public endpoint to fetch all garments."""
+    from app.models.garment import Garment
+    try:
+        garments = await Garment.find_many().sort('created_at', -1).to_list()
+        return {'items': [garment.to_dict() for garment in garments]}
+    except Exception:
+        return {'items': []}
 
 
 @app.get('/garments/{garment_id}')
-def public_garment_detail(garment_id: str) -> dict[str, object]:
-    return get_garment_by_id(garment_id).model_dump()
+async def public_garment_detail(garment_id: str) -> dict[str, object]:
+    """Public endpoint to fetch a single garment."""
+    from app.api.routes.garments import get_garment_by_id
+    try:
+        garment = await get_garment_by_id(garment_id)
+        return garment.to_dict()
+    except HTTPException:
+        raise
+    except Exception:
+        raise HTTPException(status_code=404, detail='Garment not found')
 
 
 @app.post('/session')
-def create_session(payload: TryOnSessionCreate) -> dict[str, object]:
+async def create_session(payload: TryOnSessionCreate) -> dict[str, object]:
+    """Create a new try-on session."""
     garment_id = payload.garmentId
     if garment_id is not None:
         try:
-            get_garment_by_id(garment_id)
+            from app.api.routes.garments import get_garment_by_id
+            await get_garment_by_id(garment_id)
         except HTTPException:
             raise
 

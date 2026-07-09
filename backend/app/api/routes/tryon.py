@@ -38,12 +38,9 @@ async def run_tryon(
     person_np = np.frombuffer(person_bytes, np.uint8)
     person_img = cv2.imdecode(person_np, cv2.IMREAD_COLOR)
 
-    # Get garment
-    garment_item = get_garment_by_id(garment_id)
-    # The imageUrl is like "/uploads/xxx.png" or "/clothes/xxx.png"
-    # We need the absolute path on the disk
-    # Assuming frontend/public is the root for /clothes and backend/uploads for /uploads
-    image_url = garment_item.imageUrl
+    # Get garment from MongoDB
+    garment_item = await get_garment_by_id(garment_id)
+    image_url = garment_item.image_url
     
     if image_url.startswith('/uploads/'):
         garment_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'uploads', image_url.replace('/uploads/', ''))

@@ -141,7 +141,7 @@ export default function ClothOverlay({
 
       ctx.clearRect(0, 0, cw, ch);
 
-      const m = metricsRef.current;
+      const m = metrics;
       if (!m.hasValidTracking || m.shoulderWidth < 10) {
         rafId = requestAnimationFrame(drawFrame);
         return;
@@ -150,28 +150,15 @@ export default function ClothOverlay({
       const img = imageRef.current;
 
       // ── MIRROR APPROACH ────────────────────────────────────────────────────
-      // The video element has CSS scaleX(-1) — it shows a mirror image.
-      // The canvas has NO CSS flip. We flip X ourselves: mirroredX = canvasWidth - rawX.
-      // Result: garment aligns with the mirrored video with no double-flip.
       const mirrorX = (x: number) => cw - x;
 
       const anchorMX = mirrorX(m.shoulderCenterX);
       const anchorMY = m.neckY;
       const hipMX    = mirrorX(m.hipCenterX);
 
-      // ── DISTANCE-NORMALIZED SCALING ────────────────────────────────────────
-      // distanceRatio = shoulderWidth / canvasWidth (empirical ~0.24 at ideal 70cm).
-      // normalizedScale > 1 means user is closer than ideal → garment stays body-fitted.
-      // normalizedScale < 1 means user is farther → garment shrinks proportionally.
-      const distRatio      = Math.max(0.05, m.distanceRatio);
-      const normalizedScale = distRatio / IDEAL_DISTANCE_RATIO;
-
-      // Torso height with fallback
+      // ── DIRECT PIXEL-SPACE SCALING ──────────────────────────────────────────
       const torso = m.torsoHeight > 30 ? m.torsoHeight : m.shoulderWidth * 1.4;
 
-      // ── Garment type sizing ────────────────────────────────────────────────
-      // All multipliers are relative to the IDEAL distance. normalizedScale brings them
-      // in/out as the user moves, keeping the garment body-fitted at all distances.
       let pivotX:     number;
       let pivotY:     number;
       let drawW:      number;
@@ -181,24 +168,23 @@ export default function ClothOverlay({
       if (garmentType === 'lower_body') {
         pivotX     = hipMX;
         pivotY     = m.hipCenterY;
-        // Use actual hip width if detected, otherwise estimate from shoulder
         const hipW = m.hipWidth > 10 ? m.hipWidth : m.shoulderWidth * 0.95;
-        drawW      = hipW * 1.25 * normalizedScale;
-        drawH      = torso * 1.80 * normalizedScale;
-        topOverlap = drawH * 0.04;
+        drawW      = hipW * 1.55;
+        drawH      = torso * 2.10;
+        topOverlap = drawH * 0.05;
       } else if (garmentType === 'full_body' || garmentType === 'traditional') {
         pivotX     = anchorMX;
         pivotY     = anchorMY;
-        drawW      = m.shoulderWidth * 1.50 * normalizedScale;
-        drawH      = torso * 2.05 * normalizedScale;
-        topOverlap = drawH * 0.07;
+        drawW      = m.shoulderWidth * 1.95;  // extends past body shoulders
+        drawH      = torso * 2.40;
+        topOverlap = drawH * 0.12;
       } else {
         // upper_body (shirt, kurta, jacket)
         pivotX     = anchorMX;
         pivotY     = anchorMY;
-        drawW      = m.shoulderWidth * 1.52 * normalizedScale;
-        drawH      = torso * 1.10 * normalizedScale;
-        topOverlap = drawH * 0.10;
+        drawW      = m.shoulderWidth * 2.00;  // extends past body shoulders
+        drawH      = torso * 1.38;
+        topOverlap = drawH * 0.08;
       }
 
       // Foreshortening shift when user turns (mirrored space: turning right shifts LEFT)
@@ -213,7 +199,7 @@ export default function ClothOverlay({
         const drawable = processedCanvasRef.current ?? img;
         ctx.drawImage(drawable, -drawW / 2, -topOverlap, drawW, drawH);
 
-        // Side shading for 3-D depth illusion (mirrored: shading sides swapped)
+        // Side shading for 3-D depth illusion
         const grad  = ctx.createLinearGradient(-drawW / 2, 0, drawW / 2, 0);
         const lShade = Math.max(0.02, 0.10 - m.turnY * 0.15);
         const rShade = Math.max(0.02, 0.10 + m.turnY * 0.15);
@@ -225,7 +211,6 @@ export default function ClothOverlay({
         ctx.fillRect(-drawW / 2, -topOverlap, drawW, drawH);
         ctx.globalCompositeOperation = 'source-over';
       } else {
-        // Placeholder silhouette when image isn't ready yet
         ctx.fillStyle = 'rgba(0,180,255,0.12)';
         ctx.roundRect(-drawW / 2, -topOverlap, drawW, drawH, 12);
         ctx.fill();
@@ -237,7 +222,7 @@ export default function ClothOverlay({
 
     rafId = requestAnimationFrame(drawFrame);
     return () => cancelAnimationFrame(rafId);
-  }, [canvasRef, garmentType]);
+  }, [canvasRef, garmentType, metrics]);
 
   return null;
 }

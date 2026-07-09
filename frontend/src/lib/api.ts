@@ -8,7 +8,7 @@ import { useUserStore } from '@/store/useUserStore';
 import { demoGarments } from './demoGarments';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://127.0.0.1:4000',
+  baseURL: import.meta.env.VITE_API_URL || '',
   timeout: 30000,
   withCredentials: true,
 });
@@ -27,7 +27,10 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       await useUserStore.getState().signOut();
       if (typeof window !== 'undefined') {
-        window.location.href = '/';
+        const path = window.location.pathname;
+        if (path !== '/login' && path !== '/register' && path !== '/') {
+          window.location.href = '/';
+        }
       }
     }
     return Promise.reject(error);

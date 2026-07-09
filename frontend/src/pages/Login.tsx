@@ -148,7 +148,7 @@ export default function Login() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/profile', { replace: true });
+      navigate('/wardrobe', { replace: true });
       return;
     }
 
@@ -186,7 +186,7 @@ export default function Login() {
 
     try {
       await signInWithEmail(email.trim(), password);
-      navigate('/profile', { replace: true });
+      navigate('/wardrobe', { replace: true });
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : 'Login failed.');
     }
@@ -283,7 +283,7 @@ export default function Login() {
                   type="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  className="w-full rounded-md border border-[#F5F1E8]/10 bg-black/30 px-4 py-3 text-[#F5F1E8] outline-none transition focus:border-[#D4A017]"
+                  className="w-full rounded-none border border-[#F5F1E8]/10 bg-black/30 px-4 py-3 text-[#F5F1E8] outline-none transition focus:border-[#D4A017]"
                   placeholder="you@example.com"
                 />
               </div>
@@ -297,12 +297,12 @@ export default function Login() {
                   type="password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
-                  className="w-full rounded-md border border-[#F5F1E8]/10 bg-black/30 px-4 py-3 text-[#F5F1E8] outline-none transition focus:border-[#D4A017]"
+                  className="w-full rounded-none border border-[#F5F1E8]/10 bg-black/30 px-4 py-3 text-[#F5F1E8] outline-none transition focus:border-[#D4A017]"
                   placeholder="••••••••"
                 />
               </div>
 
-              <Button loading={isLoading} className="w-full !rounded-full !bg-[#C8102E] hover:!bg-[#a80d26]" type="submit">
+              <Button loading={isLoading} className="w-full !rounded-none !bg-[#C8102E] hover:!bg-[#a80d26]" type="submit">
                 Sign In
               </Button>
             </form>
