@@ -166,11 +166,7 @@ export default function TryOn() {
               <p className="text-[10px] uppercase tracking-widest text-[#9AA3B5]">Wearing</p>
               <p className="text-sm font-bold text-[#F5F1E8] leading-tight truncate">{selectedGarment.name}</p>
             </div>
-            {selectedGarment.price && (
-              <span className="ml-2 bg-[#D4A017]/15 px-2 py-0.5 text-xs font-bold text-[#D4A017] border border-[#D4A017]/30 whitespace-nowrap">
-                Rs. {selectedGarment.price}
-              </span>
-            )}
+
           </motion.div>
         )}
       </div>
@@ -391,9 +387,7 @@ function GarmentRailCard({
         <p className="mt-0.5 text-[10px] uppercase tracking-wider text-[#9AA3B5]">
           {garment.category}
         </p>
-        {garment.price && (
-          <p className="mt-1 text-xs font-bold text-[#D4A017]">Rs. {garment.price}</p>
-        )}
+
       </div>
 
       {/* AR badge */}

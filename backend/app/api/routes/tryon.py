@@ -12,7 +12,7 @@ except Exception:
     cv2 = None
 
 from app.core.tryon_engine import TryOnEngine
-from app.api.routes.garments import get_garment_by_id
+from app.api.routes.garments import get_garment_by_id, resolve_garment_asset_path
 
 router = APIRouter(prefix='/tryon', tags=['tryon'])
 
@@ -42,11 +42,9 @@ async def run_tryon(
     garment_item = await get_garment_by_id(garment_id)
     image_url = garment_item.image_url
     
-    if image_url.startswith('/uploads/'):
-        garment_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'uploads', image_url.replace('/uploads/', ''))
-    else:
-        # Fallback to frontend public clothes
-        garment_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'frontend', 'public', image_url.lstrip('/'))
+    garment_path = resolve_garment_asset_path(image_url)
+    if not garment_path:
+        raise HTTPException(status_code=404, detail='Garment image URL is missing.')
 
     if not os.path.exists(garment_path):
         raise HTTPException(status_code=404, detail=f'Garment image not found on disk at {garment_path}')

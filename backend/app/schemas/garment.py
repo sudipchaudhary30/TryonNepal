@@ -13,7 +13,7 @@ class GarmentBase(BaseModel):
     name: str = Field(min_length=1, examples=['Kurta Set'])
     category: GarmentCategory = Field(examples=[GarmentCategory.TOP])
     brand: str | None = Field(default=None, examples=['Sherpa Tailors'])
-    price: float | None = Field(default=None, ge=0, examples=[2499.0])
+
 
 
 class GarmentCreate(GarmentBase):
@@ -29,7 +29,7 @@ class GarmentUpdate(BaseModel):
     name: str | None = Field(default=None, min_length=1)
     category: GarmentCategory | None = None
     brand: str | None = None
-    price: float | None = Field(default=None, ge=0)
+
     design_data: dict[str, object] | None = None
 
 

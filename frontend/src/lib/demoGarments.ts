@@ -5,7 +5,6 @@ import type { GarmentType } from '@/types/ar';
 const sharedMeta = {
   userId: 'demo',
   brand: 'AR TryOn Nepal',
-  price: null,
   isCustomDesign: false,
   designData: null,
   createdAt: '2026-01-01T00:00:00.000Z',

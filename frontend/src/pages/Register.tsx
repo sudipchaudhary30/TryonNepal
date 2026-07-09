@@ -334,11 +334,7 @@ export default function Register() {
                       {slides[slideIndex].category}
                     </p>
                   </div>
-                  {slides[slideIndex].price && (
-                    <span className="font-mono-label text-xs font-bold text-[#D4A017]">
-                      Rs. {slides[slideIndex].price}
-                    </span>
-                  )}
+
                 </div>
               )}
             </div>

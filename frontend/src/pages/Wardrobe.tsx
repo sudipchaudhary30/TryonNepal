@@ -141,9 +141,7 @@ export default function Wardrobe() {
                       <h3 className="font-bold text-[#F5F1E8] line-clamp-1">{garment.name}</h3>
                       <p className="text-xs text-[#9AA3B5] mt-0.5">{garment.brand || 'Personal Item'}</p>
                     </div>
-                    {garment.price != null && (
-                      <p className="text-sm font-extrabold text-[#D4A017]">Rs. {garment.price}</p>
-                    )}
+
                     <button
                       type="button"
                       onClick={() => handleTryInAR(garment)}

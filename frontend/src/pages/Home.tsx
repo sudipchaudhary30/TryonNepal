@@ -400,7 +400,7 @@ export default function Home() {
         <div className="relative z-10 mx-auto max-w-7xl px-6 pb-20 pt-28">
           <div className="flex flex-col items-start justify-center text-left max-w-3xl">
             <p className="font-mono-label text-[11px] uppercase tracking-[0.3em] text-[#D4A017]">
-              Live AR Fitting &mdash; Kathmandu
+              Live AR Fitting for Nepal
             </p>
             <h1 className="font-display mt-5 text-5xl font-semibold leading-[1.05] sm:text-6xl text-left">
               See it on.
@@ -506,11 +506,7 @@ export default function Home() {
                   <span className="font-mono-label text-[10px] uppercase tracking-wider text-[#9AA3B5]">
                     {garment.category}
                   </span>
-                  {garment.price && (
-                    <span className="font-mono-label text-[11px] font-bold text-[#D4A017]">
-                      Rs. {garment.price}
-                    </span>
-                  )}
+
                 </div>
               </div>
             </article>

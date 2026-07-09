@@ -225,9 +225,7 @@ function GarmentCard({ garment, onTryOn }: { garment: Garment; onTryOn: (g: Garm
           <p className="text-xs text-[#9AA3B5] mt-0.5">by {uploadedBy}</p>
           {garment.brand && <p className="text-xs text-[#D4A017] mt-0.5">{garment.brand}</p>}
         </div>
-        {garment.price && (
-          <p className="text-sm font-extrabold text-[#D4A017]">Rs. {garment.price}</p>
-        )}
+
         <button
           onClick={() => onTryOn(garment)}
           className="mt-auto w-full border border-[#C8102E]/30 bg-[#C8102E]/10 py-2.5 text-xs font-bold uppercase tracking-wider text-[#C8102E] transition-all hover:bg-[#C8102E] hover:text-[#F5F1E8]"

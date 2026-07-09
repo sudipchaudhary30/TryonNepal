@@ -22,7 +22,6 @@ export interface Garment {
   readonly isCustomDesign: boolean;
   readonly designData: Record<string, unknown> | null;
   readonly brand: string | null;
-  readonly price: number | null;
   readonly fileType?: '2D' | '3D';
   readonly uploadedBy?: string;
   readonly createdAt: string;
@@ -35,7 +34,6 @@ export interface GarmentUploadPayload {
   readonly name: string;
   readonly category: GarmentCategory;
   readonly brand?: string;
-  readonly price?: number;
 }
 
 /** Filters applied to garment lists. */

@@ -28,7 +28,7 @@ class Garment(Document):
     is_custom_design: bool = False
     design_data: Optional[dict[str, object]] = None
     brand: Optional[str] = None
-    price: Optional[float] = None
+
     uploaded_by: str = "Anonymous"  # Display name of uploader
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -54,7 +54,7 @@ class Garment(Document):
             'isCustomDesign': self.is_custom_design,
             'designData': self.design_data,
             'brand': self.brand,
-            'price': self.price,
+
             'uploadedBy': self.uploaded_by,
             'createdAt': self.created_at.isoformat(),
             'updatedAt': self.updated_at.isoformat(),
