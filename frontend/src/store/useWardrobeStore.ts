@@ -3,6 +3,7 @@ import { immer } from 'zustand/middleware/immer';
 import { create } from 'zustand';
 
 import { garmentApi, outfitApi } from '@/lib/api';
+import { demoGarments } from '@/lib/demoGarments';
 import type { Garment, GarmentFilter } from '@/types/garment';
 import type { Outfit } from '@/types/outfit';
 
@@ -38,11 +39,14 @@ export const useWardrobeStore = create<WardrobeStore>()(
             state.error = null;
           });
           try {
-            const garments = await garmentApi.getAll(get().filter);
+            // Force scope to community to filter out private wardrobe garments from the TryOn list
+            const publicGarments = await garmentApi.getAll({ ...get().filter, scope: 'community' });
+            const merged = [...demoGarments, ...publicGarments];
+            const deduped = Array.from(new Map(merged.map((g) => [g.id, g])).values());
             set((state) => {
-              state.garments = garments;
-              if (!state.selectedGarment && garments.length > 0) {
-                state.selectedGarment = garments[0] ?? null;
+              state.garments = deduped;
+              if (!state.selectedGarment && deduped.length > 0) {
+                state.selectedGarment = deduped[0] ?? null;
               }
               state.isLoading = false;
             });

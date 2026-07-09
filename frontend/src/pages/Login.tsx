@@ -110,15 +110,13 @@
 //   );
 // }
 
-
-
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import Button from '@/components/ui/Button';
 import Loader from '@/components/ui/Loader';
 import { useUserStore } from '@/store/useUserStore';
-import { garmentApi } from '@/lib/api';
+import { demoGarments } from '@/lib/demoGarments';
 import type { Garment } from '@/types/garment';
 
 function DhakaDivider() {
@@ -156,15 +154,8 @@ export default function Login() {
   }, [initAuth, isAuthenticated, navigate]);
 
   useEffect(() => {
-    let cancelled = false;
-    const loadSlides = async () => {
-      const garments = await garmentApi.getAll();
-      if (!cancelled) setSlides(garments.slice(0, 5));
-    };
-    void loadSlides();
-    return () => {
-      cancelled = true;
-    };
+    // Use the standard demo/TryOn garments directly — no API call needed
+    setSlides(demoGarments.slice(0, 5));
   }, []);
 
   useEffect(() => {

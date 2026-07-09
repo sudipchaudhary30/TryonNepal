@@ -14,7 +14,7 @@ const sharedMeta = {
 export const demoGarments: Garment[] = [
   // ── Traditional ───────────────────────────────────────────────────────────
   {
-    id: 'demo-himalayan-kurta',
+    id: 'garment-kurta-001',
     name: 'Himalayan Kurta',
     category: GarmentCategory.TRADITIONAL,
     imageUrl: '/clothes/himalayan_kurta.png',
@@ -24,7 +24,7 @@ export const demoGarments: Garment[] = [
     ...sharedMeta,
   },
   {
-    id: 'demo-daura-suruwal',
+    id: 'garment-daura-suruwal-001',
     name: 'Daura Suruwal Heritage',
     category: GarmentCategory.TRADITIONAL,
     imageUrl: '/clothes/daura_suruwal.png',
@@ -34,7 +34,7 @@ export const demoGarments: Garment[] = [
     ...sharedMeta,
   },
   {
-    id: 'demo-sherwani',
+    id: 'garment-sherwani-001',
     name: 'Kathmandu Sherwani Elite',
     category: GarmentCategory.TRADITIONAL,
     imageUrl: '/clothes/sherwani.png',
@@ -46,7 +46,7 @@ export const demoGarments: Garment[] = [
 
   // ── Outerwear / Jackets ───────────────────────────────────────────────────
   {
-    id: 'demo-field-jacket',
+    id: 'garment-jacket-001',
     name: 'Peakline Field Jacket',
     category: GarmentCategory.OUTERWEAR,
     imageUrl: '/clothes/field_jacket.png',
@@ -78,7 +78,7 @@ export const demoGarments: Garment[] = [
 
   // ── Tops ──────────────────────────────────────────────────────────────────
   {
-    id: 'demo-oxford-shirt',
+    id: 'garment-shirt-001',
     name: 'Midnight Oxford Shirt',
     category: GarmentCategory.TOP,
     imageUrl: '/clothes/oxford_shirt.png',
@@ -88,7 +88,7 @@ export const demoGarments: Garment[] = [
     ...sharedMeta,
   },
   {
-    id: 'demo-hoodie-men',
+    id: 'garment-hoodie-001',
     name: 'Urban Grey Hoodie',
     category: GarmentCategory.TOP,
     imageUrl: '/clothes/hoodie_grey.png',

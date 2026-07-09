@@ -335,7 +335,8 @@ export default function Home() {
   useEffect(() => {
     let cancelled = false;
     const loadCatalog = async () => {
-      const garments = await garmentApi.getAll();
+      // Show first 4 public/community garments in The Rack section
+      const garments = await garmentApi.getAll({ scope: 'community' });
       if (!cancelled) setWardrobe(garments.slice(0, 4));
     };
     void loadCatalog();
@@ -390,7 +391,7 @@ export default function Home() {
       {/* ---------------------------------------------------------------- */}
       {/* HERO                                                              */}
       {/* ---------------------------------------------------------------- */}
-      <section 
+      <section
         className="relative w-full bg-cover bg-no-repeat overflow-hidden"
         style={{ backgroundImage: `url(${heroBg})`, backgroundPosition: '80% center' }}
       >
@@ -483,7 +484,6 @@ export default function Home() {
             </h2>
           </div>
           <Link to="/wardrobe" className="text-sm font-semibold text-[#C8102E] hover:underline">
-            View full wardrobe &rarr;
           </Link>
         </div>
 

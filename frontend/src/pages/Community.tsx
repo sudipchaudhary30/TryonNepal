@@ -1,58 +1,65 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Shirt } from 'lucide-react';
+
+import ARFittingRoom from '@/components/ar/ARFittingRoom';
+import UploadPortal from '@/components/ui/UploadPortal';
 import { garmentApi } from '@/lib/api';
 import { useWardrobeStore } from '@/store/useWardrobeStore';
-import type { Garment, GarmentCategory } from '@/types/garment';
-import UploadPortal from '@/components/ui/UploadPortal';
+import { demoGarments } from '@/lib/demoGarments';
+import type { Garment } from '@/types/garment';
 
 const CATEGORY_FILTERS: { label: string; value: string }[] = [
-  { label: 'All', value: 'ALL' },
-  { label: 'Tops', value: 'TOP' },
-  { label: 'Bottoms', value: 'BOTTOM' },
-  { label: 'Dresses', value: 'DRESS' },
-  { label: 'Outerwear', value: 'OUTERWEAR' },
+  { label: 'All',         value: 'ALL' },
+  { label: 'Tops',        value: 'TOP' },
+  { label: 'Bottoms',     value: 'BOTTOM' },
+  { label: 'Dresses',     value: 'DRESS' },
+  { label: 'Outerwear',   value: 'OUTERWEAR' },
   { label: 'Traditional', value: 'TRADITIONAL' },
   { label: 'Accessories', value: 'ACCESSORY' },
 ];
 
 const CATEGORY_BADGE_COLORS: Record<string, string> = {
-  TOP: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-  BOTTOM: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-  DRESS: 'bg-pink-500/20 text-pink-300 border-pink-500/30',
-  OUTERWEAR: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
-  TRADITIONAL: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-  ACCESSORY: 'bg-teal-500/20 text-teal-300 border-teal-500/30',
+  TOP:        'bg-blue-500/20 text-blue-300 border-blue-500/30',
+  BOTTOM:     'bg-purple-500/20 text-purple-300 border-purple-500/30',
+  DRESS:      'bg-pink-500/20 text-pink-300 border-pink-500/30',
+  OUTERWEAR:  'bg-orange-500/20 text-orange-300 border-orange-500/30',
+  TRADITIONAL:'bg-amber-500/20 text-amber-300 border-amber-500/30',
+  ACCESSORY:  'bg-teal-500/20 text-teal-300 border-teal-500/30',
 };
 
 export default function Community() {
-  const navigate = useNavigate();
-  const { selectGarment } = useWardrobeStore();
+  const { selectedGarment, selectGarment } = useWardrobeStore();
 
-  const [garments, setGarments] = useState<Garment[]>([]);
-  const [filtered, setFiltered] = useState<Garment[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [allGarments, setAllGarments]   = useState<Garment[]>([]);
+  const [filtered, setFiltered]         = useState<Garment[]>([]);
+  const [isLoading, setIsLoading]       = useState(true);
+  const [uploadOpen, setUploadOpen]     = useState(false);
   const [activeCategory, setActiveCategory] = useState('ALL');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [uploadOpen, setUploadOpen] = useState(false);
+  const [searchQuery, setSearchQuery]   = useState('');
+
+  // When non-null → show ARFittingRoom for this garment
+  const [arGarment, setArGarment] = useState<Garment | null>(null);
 
   const loadGarments = useCallback(async () => {
+    setIsLoading(true);
     try {
-      setLoading(true);
-      const data = await garmentApi.getAll();
-      setGarments(data);
-    } catch (err) {
-      console.error('Failed to load community garments:', err);
+      const communityItems = await garmentApi.getAll({ scope: 'community' });
+      const merged  = [...demoGarments, ...communityItems];
+      const deduped = Array.from(new Map(merged.map((g) => [g.id, g])).values());
+      setAllGarments(deduped);
+    } catch {
+      setAllGarments(demoGarments);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   }, []);
 
   useEffect(() => { void loadGarments(); }, [loadGarments]);
 
-  // Filter locally
+  // Local filtering
   useEffect(() => {
-    let result = garments;
+    let result = allGarments;
     if (activeCategory !== 'ALL') {
       result = result.filter((g) => g.category === activeCategory);
     }
@@ -63,13 +70,59 @@ export default function Community() {
       );
     }
     setFiltered(result);
-  }, [garments, activeCategory, searchQuery]);
+  }, [allGarments, activeCategory, searchQuery]);
 
-  const handleTryOn = (garment: Garment) => {
-    selectGarment(garment);
-    navigate('/tryon');
-  };
+  // ── ARFittingRoom view ──────────────────────────────────────────────────────
+  if (arGarment) {
+    const headerSlot = (
+      <div>
+        <div className="flex items-center gap-2 mb-1">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#D4A017] animate-pulse" />
+          <span className="text-[9px] font-black uppercase tracking-widest text-[#D4A017]">Community Wardrobe</span>
+        </div>
+        <h1 className="font-display text-lg font-black text-[#F5F1E8] leading-tight">AR Mirror</h1>
+        <p className="mt-0.5 text-[10px] text-[#9AA3B5]">Select any garment from the list below</p>
+      </div>
+    );
 
+    const footerActions = (
+      <>
+        <button
+          onClick={() => setUploadOpen(true)}
+          className="flex w-full items-center justify-center gap-2 bg-[#C8102E] px-6 py-3 text-sm font-bold uppercase tracking-wider text-[#F5F1E8] hover:brightness-110 transition-all"
+        >
+          <span>↑</span> Upload Your Clothes
+        </button>
+        <button
+          onClick={() => setArGarment(null)}
+          className="w-full border border-[#F5F1E8]/10 py-2.5 text-xs font-bold uppercase tracking-wider text-[#9AA3B5] hover:border-[#F5F1E8]/20 hover:text-[#F5F1E8] transition-all"
+        >
+          ← Back to Community
+        </button>
+      </>
+    );
+
+    return (
+      <>
+        <ARFittingRoom
+          garments={filtered.length > 0 ? filtered : allGarments}
+          selectedGarment={selectedGarment}
+          onSelectGarment={selectGarment}
+          isLoading={isLoading}
+          headerSlot={headerSlot}
+          footerActions={footerActions}
+          railLabel="Community Wardrobe"
+        />
+        <UploadPortal
+          open={uploadOpen}
+          onClose={() => setUploadOpen(false)}
+          onUploadSuccess={loadGarments}
+        />
+      </>
+    );
+  }
+
+  // ── Default grid view ───────────────────────────────────────────────────────
   return (
     <div className="relative min-h-screen bg-[#0B1220] text-[#F5F1E8]" style={{ fontFamily: "'Manrope', sans-serif" }}>
       {/* Background glows */}
@@ -94,10 +147,10 @@ export default function Community() {
             </p>
             <div className="mt-3 flex items-center gap-3">
               <span className="rounded-full border border-[#F5F1E8]/10 bg-[#131B2E]/50 px-3 py-1 text-xs text-[#9AA3B5]">
-                {garments.length} garments uploaded
+                {allGarments.length} garments available
               </span>
               <span className="rounded-full border border-[#D4A017]/20 bg-[#D4A017]/10 px-3 py-1 text-xs text-[#D4A017]">
-                {garments.filter((g) => (g as any).fileType === '3D').length} 3D models
+                {allGarments.filter((g) => (g as any).fileType === '3D').length} 3D models
               </span>
             </div>
           </div>
@@ -136,35 +189,43 @@ export default function Community() {
         </div>
 
         {/* Garment Grid */}
-        {loading ? (
+        {isLoading ? (
           <div className="flex items-center justify-center py-32">
             <div className="flex flex-col items-center gap-4">
-              <div className="h-12 w-12 animate-spin rounded-full border-4 border-accent border-t-transparent" />
-              <p className="text-sm text-white/50">Loading community wardrobe...</p>
+              <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#C8102E] border-t-transparent" />
+              <p className="text-sm text-[#9AA3B5]">Loading community wardrobe...</p>
             </div>
           </div>
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32 text-center">
-            <span className="text-6xl mb-4">👕</span>
-            <p className="text-xl font-bold text-[#F5F1E8]/70">No garments yet</p>
+            <Shirt size={48} className="mb-4 text-[#9AA3B5] opacity-40" />
+            <p className="text-xl font-bold text-[#F5F1E8]/70">No garments found</p>
             <p className="mt-2 text-sm text-[#9AA3B5] max-w-sm">
-              Be the first to upload! Click "Upload Your Clothes" to add the first piece to the community wardrobe.
+              {searchQuery || activeCategory !== 'ALL'
+                ? 'Try a different search or category.'
+                : 'Be the first to upload! Click "Upload Your Clothes" to share with the community.'}
             </p>
-            <button
-              onClick={() => setUploadOpen(true)}
-              className="mt-6 bg-[#C8102E] px-6 py-2.5 text-sm font-bold uppercase tracking-wider text-[#F5F1E8] hover:brightness-110"
-            >
-              Upload First Garment
-            </button>
+            {!searchQuery && activeCategory === 'ALL' && (
+              <button
+                onClick={() => setUploadOpen(true)}
+                className="mt-6 bg-[#C8102E] px-6 py-2.5 text-sm font-bold uppercase tracking-wider text-[#F5F1E8] hover:brightness-110"
+              >
+                Upload First Garment
+              </button>
+            )}
           </div>
         ) : (
-          <motion.div
-            layout
-            className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-          >
+          <motion.div layout className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             <AnimatePresence>
               {filtered.map((garment) => (
-                <GarmentCard key={garment.id} garment={garment} onTryOn={handleTryOn} />
+                <GarmentCard
+                  key={garment.id}
+                  garment={garment}
+                  onTryOn={() => {
+                    selectGarment(garment);
+                    setArGarment(garment);
+                  }}
+                />
               ))}
             </AnimatePresence>
           </motion.div>
@@ -180,11 +241,12 @@ export default function Community() {
   );
 }
 
-function GarmentCard({ garment, onTryOn }: { garment: Garment; onTryOn: (g: Garment) => void }) {
+// ── Garment Card ─────────────────────────────────────────────────────────────
+function GarmentCard({ garment, onTryOn }: { garment: Garment; onTryOn: () => void }) {
   const [imgError, setImgError] = useState(false);
-  const fileType = (garment as any).fileType ?? '2D';
+  const fileType  = (garment as any).fileType ?? '2D';
   const uploadedBy = (garment as any).uploadedBy ?? 'Community';
-  const catColor = CATEGORY_BADGE_COLORS[garment.category] ?? 'bg-white/10 text-white/60 border-white/20';
+  const catColor  = CATEGORY_BADGE_COLORS[garment.category] ?? 'bg-white/10 text-white/60 border-white/20';
 
   return (
     <motion.div
@@ -204,7 +266,9 @@ function GarmentCard({ garment, onTryOn }: { garment: Garment; onTryOn: (g: Garm
             onError={() => setImgError(true)}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-5xl">👕</div>
+          <div className="flex h-full w-full items-center justify-center opacity-30">
+            <Shirt size={48} className="text-[#9AA3B5]" />
+          </div>
         )}
 
         {/* Badges */}
@@ -212,8 +276,19 @@ function GarmentCard({ garment, onTryOn }: { garment: Garment; onTryOn: (g: Garm
           <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${catColor}`}>
             {garment.category}
           </span>
-          <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${fileType === '3D' ? 'border-purple-500/40 bg-purple-500/20 text-purple-300' : 'border-white/20 bg-white/10 text-white/60'}`}>
+          <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${
+            fileType === '3D'
+              ? 'border-purple-500/40 bg-purple-500/20 text-purple-300'
+              : 'border-white/20 bg-white/10 text-white/60'
+          }`}>
             {fileType}
+          </span>
+        </div>
+
+        {/* AR badge */}
+        <div className="absolute bottom-2 right-2">
+          <span className="border border-[#D4A017]/30 bg-[#0B1220]/80 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-[#D4A017]">
+            AR
           </span>
         </div>
       </div>
@@ -227,7 +302,7 @@ function GarmentCard({ garment, onTryOn }: { garment: Garment; onTryOn: (g: Garm
         </div>
 
         <button
-          onClick={() => onTryOn(garment)}
+          onClick={onTryOn}
           className="mt-auto w-full border border-[#C8102E]/30 bg-[#C8102E]/10 py-2.5 text-xs font-bold uppercase tracking-wider text-[#C8102E] transition-all hover:bg-[#C8102E] hover:text-[#F5F1E8]"
         >
           Try On →

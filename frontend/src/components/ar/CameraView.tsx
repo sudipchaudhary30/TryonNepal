@@ -480,10 +480,10 @@ export default function CameraView({
                 style={{ color: namasteActive ? '#D4A017' : 'rgba(245,241,232,0.4)' }}
               >
                 {isMirrorActive
-                  ? '🙏 Namaste to stop'
+                  ? 'Namaste to stop'
                   : namasteActive
                   ? `Hold… ${Math.round(dwellPct)}%`
-                  : '🙏 Press palms together'}
+                  : 'Press palms together'}
               </motion.p>
             )}
           </AnimatePresence>

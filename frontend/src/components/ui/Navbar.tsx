@@ -54,7 +54,7 @@ export default function Navbar() {
                   to="/profile"
                   className="font-mono-label text-xs uppercase tracking-widest text-[#9AA3B5] hover:text-[#F5F1E8] transition-colors"
                 >
-                  Profile
+                  Edit Profile
                 </Link>
                 <button
                   onClick={() => void signOut()}
@@ -128,7 +128,7 @@ export default function Navbar() {
                     onClick={closeMobileMenu}
                     className="px-4 py-2 text-xs uppercase tracking-widest text-[#9AA3B5] hover:text-[#F5F1E8] transition-colors"
                   >
-                    Profile
+                    Edit Profile
                   </Link>
                   <button
                     onClick={() => {

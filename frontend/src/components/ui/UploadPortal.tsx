@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Camera, Box, Image, Shirt, UploadCloud, X, CheckCircle2, AlertCircle } from 'lucide-react';
 import { garmentApi } from '@/lib/api';
 import type { GarmentCategory } from '@/types/garment';
 
@@ -77,9 +78,9 @@ export default function UploadPortal({ open, onClose, onUploadSuccess }: UploadP
     try {
       setUploading(true);
       if (tab === '2D') {
-        await garmentApi.upload(imageFile!, name, category, uploadedBy || 'Anonymous');
+        await garmentApi.upload(imageFile!, name, category, uploadedBy || 'Anonymous', false);
       } else {
-        await garmentApi.upload3D(modelFile!, thumbnailFile!, name, category, uploadedBy || 'Anonymous');
+        await garmentApi.upload3D(modelFile!, thumbnailFile!, name, category, uploadedBy || 'Anonymous', false);
       }
       setSuccess(true);
       setTimeout(() => {
@@ -109,7 +110,7 @@ export default function UploadPortal({ open, onClose, onUploadSuccess }: UploadP
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0B1220]/80 backdrop-blur-md"
           onClick={onClose}
         >
           <motion.div
@@ -117,31 +118,47 @@ export default function UploadPortal({ open, onClose, onUploadSuccess }: UploadP
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.92, opacity: 0, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-            className="relative w-full max-w-xl border border-white/10 bg-[#0e0e14] p-6"
+            className="relative w-full max-w-xl border border-[#F5F1E8]/10 bg-[#131B2E] p-6 shadow-2xl"
+            style={{ fontFamily: "'Manrope', sans-serif" }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-accent">Community Upload</p>
-                <h2 className="mt-0.5 font-display text-2xl font-black text-white">Add Your Clothing</h2>
+                <p className="text-[10px] font-black uppercase tracking-widest text-[#D4A017]">Community Upload</p>
+                <h2 className="mt-0.5 font-display text-2xl font-black text-[#F5F1E8]">Add Your Clothing</h2>
               </div>
-              <button onClick={onClose} className="flex h-9 w-9 items-center justify-center border border-white/10 text-white/60 hover:border-white/20 hover:text-white transition-colors">
-                ✕
+              <button 
+                onClick={onClose} 
+                className="flex h-9 w-9 items-center justify-center border border-[#F5F1E8]/10 text-[#9AA3B5] hover:border-[#F5F1E8]/20 hover:text-[#F5F1E8] transition-colors"
+              >
+                <X size={16} />
               </button>
             </div>
 
             {/* Tabs */}
-            <div className="mb-5 flex gap-1 border border-white/10 bg-black/30 p-1">
+            <div className="mb-5 flex gap-1 border border-[#F5F1E8]/10 bg-[#0B1220] p-1">
               {(['2D', '3D'] as UploadTab[]).map((t) => (
                 <button
                   key={t}
                   onClick={() => setTab(t)}
-                  className={`flex-1 py-2 text-xs font-bold uppercase tracking-widest transition-all duration-200 ${
-                    tab === t ? 'bg-accent text-black' : 'text-white/50 hover:text-white'
+                  className={`flex-1 py-2.5 text-xs font-bold uppercase tracking-widest transition-all duration-200 flex items-center justify-center gap-2 ${
+                    tab === t 
+                      ? 'bg-[#C8102E] text-[#F5F1E8] shadow-md' 
+                      : 'text-[#9AA3B5] hover:text-[#F5F1E8]'
                   }`}
                 >
-                  {t === '2D' ? '📷 2D Image' : '🧊 3D Model (.glb)'}
+                  {t === '2D' ? (
+                    <>
+                      <Camera size={14} />
+                      <span>2D Image</span>
+                    </>
+                  ) : (
+                    <>
+                      <Box size={14} />
+                      <span>3D Model (.glb)</span>
+                    </>
+                  )}
                 </button>
               ))}
             </div>
@@ -153,15 +170,15 @@ export default function UploadPortal({ open, onClose, onUploadSuccess }: UploadP
                   ref={imageDrop as React.RefObject<HTMLLabelElement>}
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={handleImageDrop}
-                  className="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-white/15 bg-white/2 p-6 cursor-pointer hover:border-accent/50 transition-colors"
+                  className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#F5F1E8]/15 bg-[#0B1220]/50 p-6 cursor-pointer hover:border-[#D4A017]/50 transition-colors"
                 >
                   {imagePreview ? (
-                    <img src={imagePreview} alt="preview" className="h-32 w-auto rounded-xl object-cover" />
+                    <img src={imagePreview} alt="preview" className="h-32 w-auto rounded-xl object-cover border border-[#F5F1E8]/10" />
                   ) : (
                     <>
-                      <span className="text-3xl">🎽</span>
-                      <span className="text-sm font-medium text-white/60">Drag & drop or click to upload</span>
-                      <span className="text-xs text-white/30">PNG, JPG, WEBP supported</span>
+                      <Shirt size={28} className="text-[#9AA3B5]" />
+                      <span className="text-sm font-medium text-[#F5F1E8]/75">Drag & drop or click to upload</span>
+                      <span className="text-xs text-[#9AA3B5]/50">PNG, JPG, WEBP supported</span>
                     </>
                   )}
                   <input type="file" accept=".png,.jpg,.jpeg,.webp" className="hidden" onChange={handleImageDrop} />
@@ -174,23 +191,23 @@ export default function UploadPortal({ open, onClose, onUploadSuccess }: UploadP
                   <label
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleModelDrop}
-                    className="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-white/15 bg-white/2 p-5 cursor-pointer hover:border-accent/50 transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#F5F1E8]/15 bg-[#0B1220]/50 p-5 cursor-pointer hover:border-[#D4A017]/50 transition-colors"
                   >
-                    <span className="text-3xl">🧊</span>
-                    <span className="text-sm font-medium text-white/70">{modelFile ? `✅ ${modelFile.name}` : 'Drop .glb model file here'}</span>
+                    <Box size={24} className="text-[#D4A017]" />
+                    <span className="text-sm font-medium text-[#F5F1E8]/90">{modelFile ? `${modelFile.name}` : 'Drop .glb model file here'}</span>
                     <input type="file" accept=".glb,.gltf" className="hidden" onChange={handleModelDrop} />
                   </label>
                   <label
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleThumbDrop}
-                    className="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-white/10 bg-white/2 p-5 cursor-pointer hover:border-accent/50 transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#F5F1E8]/10 bg-[#0B1220]/50 p-5 cursor-pointer hover:border-[#D4A017]/50 transition-colors"
                   >
                     {thumbnailPreview ? (
-                      <img src={thumbnailPreview} alt="thumb" className="h-20 w-auto rounded-lg object-cover" />
+                      <img src={thumbnailPreview} alt="thumb" className="h-20 w-auto rounded-lg object-cover border border-[#F5F1E8]/10" />
                     ) : (
                       <>
-                        <span className="text-2xl">🖼️</span>
-                        <span className="text-sm text-white/50">Drop preview thumbnail image</span>
+                        <Image size={20} className="text-[#9AA3B5]" />
+                        <span className="text-sm text-[#9AA3B5]/75">Drop preview thumbnail image</span>
                       </>
                     )}
                     <input type="file" accept=".png,.jpg,.jpeg,.webp" className="hidden" onChange={handleThumbDrop} />
@@ -201,20 +218,20 @@ export default function UploadPortal({ open, onClose, onUploadSuccess }: UploadP
               {/* Metadata */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="col-span-2">
-                  <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-white/50">Garment Name *</label>
+                  <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-[#9AA3B5]/70">Garment Name *</label>
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Blue Linen Shirt"
-                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/25 focus:border-accent/50 focus:outline-none"
+                    className="w-full border border-[#F5F1E8]/10 bg-[#0B1220] px-4 py-2.5 text-sm text-[#F5F1E8] placeholder-[#9AA3B5]/40 outline-none transition focus:border-[#D4A017]"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-white/50">Category *</label>
+                  <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-[#9AA3B5]/70">Category *</label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value as GarmentCategory)}
-                    className="w-full rounded-xl border border-white/10 bg-[#0e0e14] px-3 py-2.5 text-sm text-white focus:border-accent/50 focus:outline-none"
+                    className="w-full border border-[#F5F1E8]/10 bg-[#0B1220] px-3 py-2.5 text-sm text-[#F5F1E8] outline-none transition focus:border-[#D4A017]"
                   >
                     {CATEGORIES.map((c) => (
                       <option key={c.value} value={c.value}>{c.label}</option>
@@ -222,25 +239,36 @@ export default function UploadPortal({ open, onClose, onUploadSuccess }: UploadP
                   </select>
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-white/50">Your Name</label>
+                  <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-[#9AA3B5]/70">Your Name</label>
                   <input
                     value={uploadedBy}
                     onChange={(e) => setUploadedBy(e.target.value)}
                     placeholder="Anonymous"
-                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/25 focus:border-accent/50 focus:outline-none"
+                    className="w-full border border-[#F5F1E8]/10 bg-[#0B1220] px-4 py-2.5 text-sm text-[#F5F1E8] placeholder-[#9AA3B5]/40 outline-none transition focus:border-[#D4A017]"
                   />
                 </div>
               </div>
 
-              {error && <p className="rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-2.5 text-sm text-rose-400">{error}</p>}
-              {success && <p className="rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-2.5 text-sm text-green-400">✅ Upload successful! Adding to community...</p>}
+              {error && (
+                <p className="flex items-center gap-2 rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-2.5 text-sm text-rose-400">
+                  <AlertCircle size={16} />
+                  <span>{error}</span>
+                </p>
+              )}
+              {success && (
+                <p className="flex items-center gap-2 rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-2.5 text-sm text-green-400">
+                  <CheckCircle2 size={16} />
+                  <span>Upload successful! Sharing with the community...</span>
+                </p>
+              )}
 
               <button
                 onClick={handleSubmit}
                 disabled={uploading || success}
-                className="w-full bg-accent py-3 text-sm font-black uppercase tracking-widest text-black transition-all hover:brightness-110 disabled:opacity-50"
+                className="w-full bg-[#C8102E] py-3 text-sm font-bold uppercase tracking-widest text-[#F5F1E8] transition-all hover:bg-[#b00e28] disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {uploading ? 'Uploading...' : `Share ${tab} Garment with Community`}
+                <UploadCloud size={16} />
+                <span>{uploading ? 'Uploading...' : `Share ${tab} Garment with Community`}</span>
               </button>
             </div>
           </motion.div>

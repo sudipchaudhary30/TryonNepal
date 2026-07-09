@@ -52,6 +52,12 @@ function buildQuery(filter?: GarmentFilter): string {
   if (typeof filter.isCustomDesign === 'boolean') {
     params.set('isCustomDesign', String(filter.isCustomDesign));
   }
+  if (filter.scope) {
+    params.set('scope', filter.scope);
+  }
+  if (filter.userId) {
+    params.set('user_id', filter.userId);
+  }
   const query = params.toString();
   return query ? `?${query}` : '';
 }
@@ -83,10 +89,17 @@ function matchesFilter(garment: Garment, filter?: GarmentFilter): boolean {
 export const garmentApi = {
   async getAll(filter?: GarmentFilter): Promise<Garment[]> {
     try {
-      const { data } = await api.get<{ items: Garment[] }>('/api/garments');
-      const merged = [...demoGarments, ...data.items].filter((garment) => matchesFilter(garment, filter));
+      const query = buildQuery(filter);
+      const { data } = await api.get<{ items: Garment[] }>(`/api/garments${query}`);
+      // For scoped calls (community/wardrobe), do not merge demo garments
+      if (filter?.scope && filter.scope !== 'all') {
+        return data.items.filter((g) => matchesFilter(g, filter));
+      }
+      // Default (TryOn page): API items first, demo garments as fallback for missing ones
+      const merged = [...data.items, ...demoGarments].filter((garment) => matchesFilter(garment, filter));
       return Array.from(new Map(merged.map((garment) => [garment.id, garment])).values());
     } catch {
+      if (filter?.scope && filter.scope !== 'all') return [];
       return demoGarments.filter((garment) => matchesFilter(garment, filter));
     }
   },
@@ -94,24 +107,26 @@ export const garmentApi = {
     const { data } = await api.get<Garment>(`/api/garments/${id}`);
     return data;
   },
-  async upload(file: File, name: string, category: GarmentCategory, uploadedBy = 'Anonymous'): Promise<Garment> {
+  async upload(file: File, name: string, category: GarmentCategory, uploadedBy = 'Anonymous', isPrivate = false): Promise<Garment> {
     const formData = new FormData();
     formData.append('image', file);
     formData.append('name', name);
     formData.append('category', category);
     formData.append('uploadedBy', uploadedBy);
+    formData.append('is_private', String(isPrivate));
     const { data } = await api.post<Garment>('/api/garments/', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return data;
   },
-  async upload3D(modelFile: File, thumbnailFile: File, name: string, category: GarmentCategory, uploadedBy = 'Anonymous'): Promise<Garment> {
+  async upload3D(modelFile: File, thumbnailFile: File, name: string, category: GarmentCategory, uploadedBy = 'Anonymous', isPrivate = false): Promise<Garment> {
     const formData = new FormData();
     formData.append('model', modelFile);
     formData.append('image', thumbnailFile);
     formData.append('name', name);
     formData.append('category', category);
     formData.append('uploadedBy', uploadedBy);
+    formData.append('is_private', String(isPrivate));
     const { data } = await api.post<Garment>('/api/garments/upload-3d', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });

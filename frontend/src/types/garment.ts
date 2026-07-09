@@ -16,14 +16,15 @@ export interface Garment {
   readonly category: GarmentCategory;
   readonly imageUrl: string;
   readonly thumbnailUrl: string;
-  /** Optional path to a .glb / .gltf 3-D model (e.g. '/clothes/models/oxford_shirt.glb').
-   *  When present, the AR view renders the 3-D model instead of the flat 2-D image. */
+  /** Optional path to a .glb / .gltf 3-D model. */
   readonly modelUrl?: string | null;
   readonly isCustomDesign: boolean;
+  readonly isPrivate?: boolean;
   readonly designData: Record<string, unknown> | null;
   readonly brand: string | null;
   readonly fileType?: '2D' | '3D';
   readonly uploadedBy?: string;
+  readonly price?: number | null;
   readonly createdAt: string;
   readonly updatedAt: string;
 }
@@ -41,4 +42,6 @@ export interface GarmentFilter {
   readonly category?: GarmentCategory | 'ALL';
   readonly query?: string;
   readonly isCustomDesign?: boolean;
+  readonly scope?: 'all' | 'community' | 'wardrobe';
+  readonly userId?: string;
 }

@@ -140,6 +140,7 @@ def _garment_to_dict(garment: dict) -> dict[str, object]:
         'modelUrl': garment.get('model_url'),
         'fileType': garment.get('file_type', '2D'),
         'isCustomDesign': garment.get('is_custom_design', False),
+        'isPrivate': garment.get('is_private', False),
         'brand': garment.get('brand'),
         'price': garment.get('price'),
         'uploadedBy': garment.get('uploaded_by', 'Anonymous'),
@@ -226,52 +227,40 @@ async def seed_demo_garments() -> None:
 
 
 @router.get('/')
-async def list_garments() -> dict[str, list[dict[str, object]]]:
-    """Return all garments from MongoDB (newest first) or demo data if unavailable."""
+async def list_garments(
+    scope: str = 'all',
+    user_id: str | None = None,
+) -> dict[str, list[dict[str, object]]]:
+    """Return garments from MongoDB filtered by scope.
+
+    scope='community' → only public garments (is_private=False)
+    scope='wardrobe'  → only private garments belonging to user_id
+    scope='all'       → everything (default, used by TryOn page)
+    """
     try:
         collection = _get_garments_collection()
         if collection is not None:
-            garments = list(collection.find().sort('created_at', -1))
+            query: dict[str, object] = {}
+            if scope == 'community':
+                query['is_private'] = {'$ne': True}  # false OR missing
+            elif scope == 'wardrobe':
+                query['is_private'] = True
+                if user_id:
+                    query['user_id'] = user_id  # narrow to this user's uploads
+            garments = list(collection.find(query).sort('created_at', -1))
             items = [_garment_to_dict(g) for g in garments]
         else:
             items = []
 
         fallback_items = [_garment_to_dict(g) for g in _get_fallback_garments()]
-        demo_items = [
-            {
-                'id': str(i),
-                'name': item['name'],
-                'category': item['category'],
-                'imageUrl': item['image_url'],
-                'thumbnailUrl': item['thumbnail_url'],
-                'brand': item.get('brand'),
-                'price': item.get('price'),
-                'uploadedBy': item.get('uploaded_by', 'Anonymous'),
-                'isCustomDesign': False,
-                'userId': 'demo-user',
-            }
-            for i, item in enumerate(DEMO_GARMENTS_DATA)
-        ]
-        return {'items': fallback_items + items + demo_items}
-        
+        # For community/wardrobe scopes don't include seeded demo fallback items
+        if scope in ('community', 'wardrobe'):
+            return {'items': items}
+        return {'items': fallback_items + items}
+
     except Exception as e:
         logger.error('Error fetching garments: %s | %s', e, traceback.format_exc())
-        demo_items = [
-            {
-                'id': str(i),
-                'name': item['name'],
-                'category': item['category'],
-                'imageUrl': item['image_url'],
-                'thumbnailUrl': item['thumbnail_url'],
-                'brand': item.get('brand'),
-                'price': item.get('price'),
-                'uploadedBy': item.get('uploaded_by', 'Anonymous'),
-                'isCustomDesign': False,
-                'userId': 'demo-user',
-            }
-            for i, item in enumerate(DEMO_GARMENTS_DATA)
-        ]
-        return {'items': _get_fallback_garments() + demo_items}
+        return {'items': [_garment_to_dict(g) for g in _get_fallback_garments()]}
 
 
 @router.get('/{garment_id}')
@@ -302,6 +291,7 @@ async def upload_2d_garment(
     uploadedBy: str = Form(default='Anonymous'),
     brand: str = Form(default=''),
     price: str = Form(default=''),
+    is_private: bool = Form(default=False),
 ) -> dict[str, object]:
     """Upload a 2D clothing image (PNG/JPG/WEBP)."""
     try:
@@ -329,6 +319,7 @@ async def upload_2d_garment(
             'model_url': None,
             'file_type': '2D',
             'is_custom_design': True,
+            'is_private': is_private,
             'brand': brand or None,
             'price': float(price) if price else None,
             'uploaded_by': uploadedBy or 'Anonymous',
@@ -341,7 +332,7 @@ async def upload_2d_garment(
             try:
                 result = collection.insert_one(doc)
                 doc['_id'] = result.inserted_id
-                logger.info('Uploaded 2D garment: %s (ID: %s)', name, result.inserted_id)
+                logger.info('Uploaded 2D garment: %s (ID: %s, private: %s)', name, result.inserted_id, is_private)
             except Exception as db_error:
                 logger.warning('Mongo insert failed for uploaded garment; using fallback storage: %s', db_error)
                 doc['_id'] = str(uuid4())
@@ -371,28 +362,25 @@ async def upload_3d_garment(
     uploadedBy: str = Form(default='Anonymous'),
     brand: str = Form(default=''),
     price: str = Form(default=''),
+    is_private: bool = Form(default=False),
 ) -> dict[str, object]:
     """Upload a 3D clothing model (.glb) with a preview image thumbnail."""
     try:
         uploads_dir = _get_uploads_dir()
 
-        # Validate image
         img_ext = os.path.splitext(image.filename or '')[1].lower()
         if img_ext not in ALLOWED_IMAGE_EXTENSIONS:
             raise HTTPException(status_code=400, detail=f'Invalid image type. Allowed: {ALLOWED_IMAGE_EXTENSIONS}')
 
-        # Validate model
         model_ext = os.path.splitext(model.filename or '')[1].lower()
         if model_ext not in ALLOWED_MODEL_EXTENSIONS:
             raise HTTPException(status_code=400, detail=f'Invalid model type. Allowed: {ALLOWED_MODEL_EXTENSIONS}')
 
-        # Save image
         img_filename = f"{uuid4()}{img_ext}"
         img_path = os.path.join(uploads_dir, img_filename)
         with open(img_path, 'wb') as buffer:
             shutil.copyfileobj(image.file, buffer)
 
-        # Save model
         model_filename = f"{uuid4()}{model_ext}"
         model_path = os.path.join(uploads_dir, model_filename)
         with open(model_path, 'wb') as buffer:
@@ -411,6 +399,7 @@ async def upload_3d_garment(
             'model_url': model_url,
             'file_type': '3D',
             'is_custom_design': True,
+            'is_private': is_private,
             'brand': brand or None,
             'price': float(price) if price else None,
             'uploaded_by': uploadedBy or 'Anonymous',
@@ -423,7 +412,7 @@ async def upload_3d_garment(
             try:
                 result = collection.insert_one(doc)
                 doc['_id'] = result.inserted_id
-                logger.info('Uploaded 3D garment: %s (ID: %s)', name, result.inserted_id)
+                logger.info('Uploaded 3D garment: %s (ID: %s, private: %s)', name, result.inserted_id, is_private)
             except Exception as db_error:
                 logger.warning('Mongo insert failed for 3D garment; using fallback storage: %s', db_error)
                 doc['_id'] = str(uuid4())
