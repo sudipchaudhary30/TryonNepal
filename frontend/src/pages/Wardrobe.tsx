@@ -42,15 +42,15 @@ export default function Wardrobe() {
         <div className="absolute top-1/2 right-0 h-80 w-80 rounded-full bg-[#D4A017]/5 blur-[100px]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
-          <div>
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+          <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-2">
               <span className="h-2 w-2 rounded-full bg-[#D4A017] animate-pulse" />
               <span className="text-[10px] font-black uppercase tracking-widest text-[#D4A017]">Personal Space</span>
             </div>
-            <h1 className="font-display text-4xl font-black text-[#F5F1E8] sm:text-5xl">My Wardrobe</h1>
-            <p className="mt-2 max-w-xl text-sm text-[#9AA3B5]">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-black text-[#F5F1E8]">My Wardrobe</h1>
+            <p className="mt-2 text-sm text-[#9AA3B5]">
               Your private collection of garments. Upload custom pieces to try them on in real-time AR.
             </p>
             <div className="mt-3 flex items-center gap-3">
@@ -59,16 +59,16 @@ export default function Wardrobe() {
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-2 bg-[#C8102E] px-6 py-3 text-sm font-bold uppercase tracking-wider text-[#F5F1E8] transition-all hover:brightness-110 hover:scale-[1.01]"
+              className="flex items-center justify-center gap-2 bg-[#C8102E] px-6 py-3 text-sm font-bold uppercase tracking-wider text-[#F5F1E8] transition-all hover:brightness-110 hover:scale-[1.01] whitespace-nowrap"
             >
-              <span className="text-base">+</span> Add Garment
+              <span className="text-base">+</span> <span className="hidden sm:inline">Add Garment</span><span className="sm:hidden">Add</span>
             </button>
             <button
               onClick={() => void refetch()}
-              className="border border-[#F5F1E8]/10 bg-[#131B2E]/50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#9AA3B5] hover:border-[#F5F1E8]/20 hover:text-[#F5F1E8]"
+              className="border border-[#F5F1E8]/10 bg-[#131B2E]/50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#9AA3B5] hover:border-[#F5F1E8]/20 hover:text-[#F5F1E8] whitespace-nowrap"
             >
               Refresh
             </button>

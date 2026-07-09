@@ -31,6 +31,7 @@ export default function TryOn() {
   const [showSkeleton, setShowSkeleton] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [showGarmentSelector, setShowGarmentSelector] = useState(false);
 
   // Canvas size tracked here so the body tracker can convert to real measurements
   const [canvasSize, setCanvasSize] = useState({ w: 640, h: 480 });
@@ -68,9 +69,9 @@ export default function TryOn() {
   const sizeRec     = useNepaliSizeRecommendation(bodyMetrics);
 
   return (
-    <div className="flex h-[calc(100vh-64px)] w-full overflow-hidden bg-[#0B1220] text-[#F5F1E8]">
-      {/* ── LEFT: AR Mirror ─────────────────────────────────────── */}
-      <div className="relative flex-1 min-w-0">
+    <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] w-full overflow-hidden bg-[#0B1220] text-[#F5F1E8]">
+      {/* ── CAMERA VIEW (Main/Left on desktop, full on mobile) ─────────────────────── */}
+      <div className="relative flex-1 min-w-0 flex flex-col lg:flex-row">
         {/* Mirror frame glow */}
         <div className="pointer-events-none absolute inset-0 z-10 border border-white/5" />
 
@@ -113,28 +114,35 @@ export default function TryOn() {
           )}
         </AnimatePresence>
 
-        {/* Bottom HUD Controls */}
-        <div className="absolute bottom-0 left-0 right-0 z-40 flex items-end justify-between p-4 pointer-events-none">
+        {/* Bottom HUD Controls (Mobile) */}
+        <div className="absolute bottom-0 left-0 right-0 z-40 flex flex-col sm:flex-row items-end justify-between p-4 pointer-events-none gap-2">
           <div className="pointer-events-auto flex flex-col gap-2">
             <button
               onClick={() => setShowSkeleton(v => !v)}
-              className={`flex items-center gap-2 border px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all ${
+              className={`flex items-center gap-2 border px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all ${
                 showSkeleton
                   ? 'border-[#D4A017]/60 bg-[#D4A017]/20 text-[#D4A017]'
                   : 'border-[#F5F1E8]/10 bg-[#0B1220]/60 text-[#9AA3B5] hover:border-[#F5F1E8]/30 hover:text-[#F5F1E8]'
               }`}
             >
               <span className={`h-1.5 w-1.5 rounded-full ${showSkeleton ? 'bg-[#D4A017] animate-pulse' : 'bg-[#9AA3B5]/40'}`} />
-              {showSkeleton ? 'Hide Tracker' : 'Show Tracker'}
+              <span className="hidden sm:inline">{showSkeleton ? 'Hide Tracker' : 'Show Tracker'}</span>
+              <span className="sm:hidden">{showSkeleton ? 'Hide' : 'Show'}</span>
             </button>
           </div>
 
-          <div className="pointer-events-auto">
+          <div className="pointer-events-auto flex gap-2">
             <button
               onClick={() => setUploadOpen(true)}
-              className="border border-[#F5F1E8]/15 bg-[#0B1220]/50 px-5 py-2 text-xs font-bold uppercase tracking-wider text-[#F5F1E8]/80 hover:border-[#C8102E]/60 hover:text-[#C8102E] transition-all"
+              className="border border-[#F5F1E8]/15 bg-[#0B1220]/50 px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#F5F1E8]/80 hover:border-[#C8102E]/60 hover:text-[#C8102E] transition-all whitespace-nowrap"
             >
-              ↑ Upload Garment
+              ↑ <span className="hidden sm:inline">Upload</span>
+            </button>
+            <button
+              onClick={() => setShowGarmentSelector(!showGarmentSelector)}
+              className="lg:hidden border border-[#F5F1E8]/15 bg-[#0B1220]/50 px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#F5F1E8]/80 hover:border-[#D4A017]/60 hover:text-[#D4A017] transition-all whitespace-nowrap"
+            >
+              👕 Select
             </button>
           </div>
         </div>
@@ -145,7 +153,7 @@ export default function TryOn() {
             key={selectedGarment.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="absolute left-4 top-4 z-40 flex items-center gap-3 border border-[#F5F1E8]/10 bg-[#131B2E]/90 px-4 py-2.5"
+            className="absolute left-4 top-4 z-40 flex items-center gap-3 border border-[#F5F1E8]/10 bg-[#131B2E]/90 px-4 py-2.5 text-sm"
           >
             {selectedGarment.thumbnailUrl && (
               <img
@@ -154,12 +162,12 @@ export default function TryOn() {
                 className="h-9 w-9 object-cover border border-[#F5F1E8]/10"
               />
             )}
-            <div>
+            <div className="flex-1 min-w-0">
               <p className="text-[10px] uppercase tracking-widest text-[#9AA3B5]">Wearing</p>
-              <p className="text-sm font-bold text-[#F5F1E8] leading-tight">{selectedGarment.name}</p>
+              <p className="text-sm font-bold text-[#F5F1E8] leading-tight truncate">{selectedGarment.name}</p>
             </div>
             {selectedGarment.price && (
-              <span className="ml-2 bg-[#D4A017]/15 px-2 py-0.5 text-xs font-bold text-[#D4A017] border border-[#D4A017]/30">
+              <span className="ml-2 bg-[#D4A017]/15 px-2 py-0.5 text-xs font-bold text-[#D4A017] border border-[#D4A017]/30 whitespace-nowrap">
                 Rs. {selectedGarment.price}
               </span>
             )}
@@ -167,8 +175,10 @@ export default function TryOn() {
         )}
       </div>
 
-      {/* ── RIGHT: Garment Rail ──────────────────────────────────── */}
-      <aside className="relative z-10 flex w-[260px] shrink-0 flex-col border-l border-[#F5F1E8]/10 bg-[#131B2E]/90">
+      {/* ── GARMENT SIDEBAR (Right on desktop, modal on mobile) ──────────────────────── */}
+      <aside className={`relative z-20 flex w-full lg:w-[260px] shrink-0 flex-col border-l border-[#F5F1E8]/10 bg-[#131B2E]/90 max-h-[60vh] lg:max-h-full transition-transform duration-300 ${
+        showGarmentSelector ? 'translate-y-0' : 'translate-y-full lg:translate-y-0'
+      }`}>
         {/* Rail header */}
         <div className="border-b border-[#F5F1E8]/10 px-4 py-4">
           <div className="flex items-center gap-2">
