@@ -1,18 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
 import { Pose, type Results } from '@mediapipe/pose';
 import type { NormalizedLandmark } from '@/types/ar';
+import { useARStore } from '@/store/useARStore';
 
 export function usePoseDetection(videoRef: React.RefObject<HTMLVideoElement>, isReady: boolean) {
   const [landmarks, setLandmarks] = useState<NormalizedLandmark[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [fps, setFps] = useState(0);
-  
-  const poseRef = useRef<Pose | null>(null);
-  const requestRef = useRef<number>();
-  const lastFrameTime = useRef<number>(0);
-  const framesCount = useRef(0);
-  const fpsCalculateTime = useRef<number>(0);
 
+  const setStoreLandmarks = useARStore((s) => s.setLandmarks);
+  const setStoreFps       = useARStore((s) => s.setFps);
+
+  const poseRef           = useRef<Pose | null>(null);
+  const requestRef        = useRef<number>();
+  const framesCount       = useRef(0);
+  const fpsCalculateTime  = useRef<number>(0);
+  // Track last processed video timestamp to avoid re-sending the same frame
+  const lastVideoTime     = useRef<number>(-1);
+
+  // ── Init MediaPipe Pose ────────────────────────────────────────────────────
   useEffect(() => {
     if (!isReady || !videoRef.current) return;
 
@@ -25,21 +31,21 @@ export function usePoseDetection(videoRef: React.RefObject<HTMLVideoElement>, is
         });
 
         pose.setOptions({
-          modelComplexity: 1, // 0=fast/low quality, 1=balanced, 2=slow/high quality
+          modelComplexity: 2,            // Max quality (was 1)
           smoothLandmarks: true,
-          enableSegmentation: false, // Turn off segmentation for better performance
+          enableSegmentation: false,
           smoothSegmentation: false,
-          minDetectionConfidence: 0.65,
-          minTrackingConfidence: 0.65,
+          minDetectionConfidence: 0.75,  // Raised from 0.65
+          minTrackingConfidence: 0.75,   // Raised from 0.65
         });
 
         pose.onResults((results: Results) => {
           if (!isSubscribed) return;
-          if (results.poseLandmarks) {
-            setLandmarks(results.poseLandmarks as NormalizedLandmark[]);
-          } else {
-            setLandmarks(null);
-          }
+          const lms = results.poseLandmarks
+            ? (results.poseLandmarks as NormalizedLandmark[])
+            : null;
+          setLandmarks(lms);
+          setStoreLandmarks(lms); // Push to global Zustand store
           setIsLoading(false);
         });
 
@@ -49,7 +55,7 @@ export function usePoseDetection(videoRef: React.RefObject<HTMLVideoElement>, is
           setIsLoading(false);
         }
       } catch (error) {
-        console.error("Failed to init Pose:", error);
+        console.error('Failed to init Pose:', error);
       }
     };
 
@@ -64,52 +70,67 @@ export function usePoseDetection(videoRef: React.RefObject<HTMLVideoElement>, is
         cancelAnimationFrame(requestRef.current);
       }
     };
-  }, [isReady, videoRef]);
+  }, [isReady, videoRef, setStoreLandmarks]);
 
-  // Video processing loop
+  // ── Video processing loop ──────────────────────────────────────────────────
   useEffect(() => {
     if (!isReady || isLoading || !videoRef.current || !poseRef.current) return;
-    
+
     let isSubscribed = true;
     const video = videoRef.current;
-    
+
     const processFrame = async () => {
-      if (!isSubscribed || !video || video.readyState < 2) {
+      if (!isSubscribed) return;
+
+      if (!video || video.readyState < 2) {
         requestRef.current = requestAnimationFrame(processFrame);
         return;
       }
-      
+
+      // Skip if this exact video frame was already processed
+      // This avoids hammering MediaPipe when display refresh > camera FPS
+      const currentTime = video.currentTime;
+      if (currentTime === lastVideoTime.current) {
+        requestRef.current = requestAnimationFrame(processFrame);
+        return;
+      }
+      lastVideoTime.current = currentTime;
+
       const now = performance.now();
-      
+
       try {
         await poseRef.current?.send({ image: video });
-        
-        // Calculate FPS
+
+        // FPS calculation
         framesCount.current++;
         if (now - fpsCalculateTime.current > 1000) {
-          setFps(Math.round((framesCount.current * 1000) / (now - fpsCalculateTime.current)));
+          const calculatedFps = Math.round(
+            (framesCount.current * 1000) / (now - fpsCalculateTime.current)
+          );
+          setFps(calculatedFps);
+          setStoreFps(calculatedFps); // Push to global store
           framesCount.current = 0;
           fpsCalculateTime.current = now;
         }
       } catch (error) {
-        console.error("Pose processing error:", error);
+        console.error('Pose processing error:', error);
       }
-      
+
       if (isSubscribed) {
         requestRef.current = requestAnimationFrame(processFrame);
       }
     };
-    
+
     fpsCalculateTime.current = performance.now();
     requestRef.current = requestAnimationFrame(processFrame);
-    
+
     return () => {
       isSubscribed = false;
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current);
       }
     };
-  }, [isReady, isLoading, videoRef]);
+  }, [isReady, isLoading, videoRef, setStoreFps]);
 
   return { landmarks, isLoading, fps };
 }

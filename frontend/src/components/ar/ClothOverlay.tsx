@@ -9,16 +9,23 @@ interface ClothOverlayProps {
   garmentType: GarmentType;
 }
 
+// ── REFERENCE DISTANCE ────────────────────────────────────────────────────────
+// Expected distanceRatio (shoulderWidth / canvasWidth) when the user is at the
+// ideal standing distance (~70 cm from a typical webcam).
+// At this ratio the garment fits perfectly with the default multipliers below.
+// If the user is closer, distanceRatio > REF → garment scales up; farther → scales down.
+const IDEAL_DISTANCE_RATIO = 0.24;
+
 export default function ClothOverlay({
   landmarks,
   garmentImageUrl,
   canvasRef,
   garmentType,
 }: ClothOverlayProps) {
-  const imageRef = useRef<HTMLImageElement | null>(null);
+  const imageRef          = useRef<HTMLImageElement | null>(null);
   const processedCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // ─── Load & background-remove garment image ───────────────────────────────
+  // ── Load & background-remove garment image ──────────────────────────────────
   useEffect(() => {
     if (!garmentImageUrl) {
       imageRef.current = null;
@@ -31,25 +38,26 @@ export default function ClothOverlay({
     img.onload = () => {
       imageRef.current = img;
       try {
-        const W = img.naturalWidth || 512;
+        const W = img.naturalWidth  || 512;
         const H = img.naturalHeight || 512;
         const pCanvas = document.createElement('canvas');
-        pCanvas.width = W;
+        pCanvas.width  = W;
         pCanvas.height = H;
         const pCtx = pCanvas.getContext('2d');
         if (!pCtx) return;
 
         pCtx.drawImage(img, 0, 0);
         const imgData = pCtx.getImageData(0, 0, W, H);
-        const data = imgData.data;
+        const data    = imgData.data;
         const visited = new Uint8Array(W * H);
 
+        // Flood-fill from edges: marks connected light/transparent pixels as background
         const isBg = (idx: number) => {
           const r = data[idx], g = data[idx + 1], b = data[idx + 2], a = data[idx + 3];
           if (a < 20) return true;
-          const brightness = r * 0.299 + g * 0.587 + b * 0.114;
-          const saturation = Math.max(r, g, b) - Math.min(r, g, b);
-          return brightness > 218 && saturation < 28;
+          const brightness  = r * 0.299 + g * 0.587 + b * 0.114;
+          const saturation  = Math.max(r, g, b) - Math.min(r, g, b);
+          return brightness > 215 && saturation < 30;
         };
 
         const queue: number[] = [];
@@ -73,6 +81,7 @@ export default function ClothOverlay({
           }
         }
 
+        // Remove background; feather edge pixels
         for (let y = 0; y < H; y++) {
           for (let x = 0; x < W; x++) {
             const pos = y * W + x;
@@ -96,7 +105,7 @@ export default function ClothOverlay({
     };
   }, [garmentImageUrl]);
 
-  // ─── Canvas size sync ─────────────────────────────────────────────────────
+  // ── Canvas size sync ─────────────────────────────────────────────────────────
   const canvasSizeRef = useRef({ w: 640, h: 480 });
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -111,16 +120,12 @@ export default function ClothOverlay({
     return () => obs.disconnect();
   }, [canvasRef]);
 
-  // ─── Body tracker ─────────────────────────────────────────────────────────
-  const metrics = useBodyTracker(
-    landmarks,
-    canvasSizeRef.current.w,
-    canvasSizeRef.current.h,
-  );
+  // ── Body tracker ─────────────────────────────────────────────────────────────
+  const metrics    = useBodyTracker(landmarks, canvasSizeRef.current.w, canvasSizeRef.current.h);
   const metricsRef = useRef(metrics);
   metricsRef.current = metrics;
 
-  // ─── Drawing loop ─────────────────────────────────────────────────────────
+  // ── Drawing loop ─────────────────────────────────────────────────────────────
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -144,70 +149,74 @@ export default function ClothOverlay({
 
       const img = imageRef.current;
 
-      // ─────────────────────────────────────────────────────────────────────
-      // MIRROR APPROACH (no lateral inversion):
-      //
-      // The VIDEO element has CSS transform: scaleX(-1) — it shows a mirror image.
-      // The CANVAS has NO CSS flip — we draw in the same coordinate space as the
-      // raw camera feed. To align with the mirrored video, we flip X coordinates
-      // ourselves: mirroredX = canvasWidth - rawX
-      //
-      // This way there is ONE source of truth — no double-flip confusion.
-      // The garment is drawn in mirrored coordinates, matching the mirror video.
-      // ─────────────────────────────────────────────────────────────────────
-
+      // ── MIRROR APPROACH ────────────────────────────────────────────────────
+      // The video element has CSS scaleX(-1) — it shows a mirror image.
+      // The canvas has NO CSS flip. We flip X ourselves: mirroredX = canvasWidth - rawX.
+      // Result: garment aligns with the mirrored video with no double-flip.
       const mirrorX = (x: number) => cw - x;
 
       const anchorMX = mirrorX(m.shoulderCenterX);
-      const anchorMY = m.neckY; // Y is same in both spaces
+      const anchorMY = m.neckY;
       const hipMX    = mirrorX(m.hipCenterX);
 
+      // ── DISTANCE-NORMALIZED SCALING ────────────────────────────────────────
+      // distanceRatio = shoulderWidth / canvasWidth (empirical ~0.24 at ideal 70cm).
+      // normalizedScale > 1 means user is closer than ideal → garment stays body-fitted.
+      // normalizedScale < 1 means user is farther → garment shrinks proportionally.
+      const distRatio      = Math.max(0.05, m.distanceRatio);
+      const normalizedScale = distRatio / IDEAL_DISTANCE_RATIO;
+
+      // Torso height with fallback
       const torso = m.torsoHeight > 30 ? m.torsoHeight : m.shoulderWidth * 1.4;
 
-      let pivotX: number;
-      let pivotY: number;
-      let drawW: number;
-      let drawH: number;
+      // ── Garment type sizing ────────────────────────────────────────────────
+      // All multipliers are relative to the IDEAL distance. normalizedScale brings them
+      // in/out as the user moves, keeping the garment body-fitted at all distances.
+      let pivotX:     number;
+      let pivotY:     number;
+      let drawW:      number;
+      let drawH:      number;
       let topOverlap: number;
 
       if (garmentType === 'lower_body') {
-        pivotX = hipMX;
-        pivotY = m.hipCenterY;
-        drawW  = m.shoulderWidth * 1.15;
-        drawH  = torso * 1.85;
+        pivotX     = hipMX;
+        pivotY     = m.hipCenterY;
+        // Use actual hip width if detected, otherwise estimate from shoulder
+        const hipW = m.hipWidth > 10 ? m.hipWidth : m.shoulderWidth * 0.95;
+        drawW      = hipW * 1.25 * normalizedScale;
+        drawH      = torso * 1.80 * normalizedScale;
         topOverlap = drawH * 0.04;
       } else if (garmentType === 'full_body' || garmentType === 'traditional') {
-        pivotX = anchorMX;
-        pivotY = anchorMY;
-        drawW  = m.shoulderWidth * 1.55;
-        drawH  = torso * 2.1;
-        topOverlap = drawH * 0.06;
+        pivotX     = anchorMX;
+        pivotY     = anchorMY;
+        drawW      = m.shoulderWidth * 1.50 * normalizedScale;
+        drawH      = torso * 2.05 * normalizedScale;
+        topOverlap = drawH * 0.07;
       } else {
-        // upper_body
-        pivotX = anchorMX;
-        pivotY = anchorMY;
-        drawW  = m.shoulderWidth * 1.55;
-        drawH  = torso * 1.12;
-        topOverlap = drawH * 0.09;
+        // upper_body (shirt, kurta, jacket)
+        pivotX     = anchorMX;
+        pivotY     = anchorMY;
+        drawW      = m.shoulderWidth * 1.52 * normalizedScale;
+        drawH      = torso * 1.10 * normalizedScale;
+        topOverlap = drawH * 0.10;
       }
 
-      // Foreshortening shift when user turns (positive turnY = right shoulder toward camera)
-      // In mirrored space: turning right means the body shifts LEFT on screen
+      // Foreshortening shift when user turns (mirrored space: turning right shifts LEFT)
       const shiftX = m.turnY * drawW * 0.20;
 
       ctx.save();
       ctx.translate(pivotX + shiftX, pivotY);
-      // Tilt: sign is negated in mirrored space
+      // Tilt is negated in mirrored space
       ctx.rotate(-m.tiltZ);
 
       if (img && img.complete) {
         const drawable = processedCanvasRef.current ?? img;
         ctx.drawImage(drawable, -drawW / 2, -topOverlap, drawW, drawH);
 
-        // Side shading for 3D depth (mirrored: left/right shading swapped)
-        const grad = ctx.createLinearGradient(-drawW / 2, 0, drawW / 2, 0);
-        const lShade = Math.max(0.03, 0.12 - m.turnY * 0.18);
-        const rShade = Math.max(0.03, 0.12 + m.turnY * 0.18);
+        // Side shading for 3-D depth illusion (mirrored: shading sides swapped)
+        const grad  = ctx.createLinearGradient(-drawW / 2, 0, drawW / 2, 0);
+        const lShade = Math.max(0.02, 0.10 - m.turnY * 0.15);
+        const rShade = Math.max(0.02, 0.10 + m.turnY * 0.15);
         grad.addColorStop(0,    `rgba(0,0,0,${lShade})`);
         grad.addColorStop(0.45, 'rgba(255,255,255,0.03)');
         grad.addColorStop(1,    `rgba(0,0,0,${rShade})`);
@@ -216,6 +225,7 @@ export default function ClothOverlay({
         ctx.fillRect(-drawW / 2, -topOverlap, drawW, drawH);
         ctx.globalCompositeOperation = 'source-over';
       } else {
+        // Placeholder silhouette when image isn't ready yet
         ctx.fillStyle = 'rgba(0,180,255,0.12)';
         ctx.roundRect(-drawW / 2, -topOverlap, drawW, drawH, 12);
         ctx.fill();

@@ -71,11 +71,11 @@ export default function Community() {
   };
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen bg-[#0B1220] text-[#F5F1E8]" style={{ fontFamily: "'Manrope', sans-serif" }}>
       {/* Background glows */}
       <div className="pointer-events-none fixed top-0 left-0 w-full h-full overflow-hidden z-0">
-        <div className="absolute -top-40 left-1/4 h-96 w-96 rounded-full bg-accent/8 blur-[120px]" />
-        <div className="absolute top-1/2 right-0 h-80 w-80 rounded-full bg-purple-500/5 blur-[100px]" />
+        <div className="absolute -top-40 left-1/4 h-96 w-96 rounded-full bg-[#C8102E]/8 blur-[120px]" />
+        <div className="absolute top-1/2 right-0 h-80 w-80 rounded-full bg-[#D4A017]/5 blur-[100px]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -83,27 +83,27 @@ export default function Community() {
         <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-accent">Community Wardrobe</span>
+              <span className="h-2 w-2 rounded-full bg-[#D4A017] animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#D4A017]">Community Wardrobe</span>
             </div>
-            <h1 className="font-display text-4xl font-black text-white sm:text-5xl">
+            <h1 className="font-display text-4xl font-black text-[#F5F1E8] sm:text-5xl">
               Try Community Clothes
             </h1>
-            <p className="mt-2 max-w-xl text-sm text-white/50">
+            <p className="mt-2 max-w-xl text-sm text-[#9AA3B5]">
               Browse clothing uploaded by the community. Select any piece and try it on instantly in the AR mirror.
             </p>
             <div className="mt-3 flex items-center gap-3">
-              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/60">
+              <span className="rounded-full border border-[#F5F1E8]/10 bg-[#131B2E]/50 px-3 py-1 text-xs text-[#9AA3B5]">
                 {garments.length} garments uploaded
               </span>
-              <span className="rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs text-accent">
+              <span className="rounded-full border border-[#D4A017]/20 bg-[#D4A017]/10 px-3 py-1 text-xs text-[#D4A017]">
                 {garments.filter((g) => (g as any).fileType === '3D').length} 3D models
               </span>
             </div>
           </div>
           <button
             onClick={() => setUploadOpen(true)}
-            className="flex items-center gap-2 bg-accent px-6 py-3 text-sm font-black uppercase tracking-wider text-black transition-all hover:brightness-110 hover:scale-[1.01]"
+            className="flex items-center gap-2 bg-[#C8102E] px-6 py-3 text-sm font-bold uppercase tracking-wider text-[#F5F1E8] transition-all hover:brightness-110 hover:scale-[1.01]"
           >
             <span className="text-base">↑</span>
             Upload Your Clothes
@@ -116,7 +116,7 @@ export default function Community() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search garments, brands, uploaders..."
-            className="min-w-[240px] flex-1 border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-accent/50 focus:outline-none"
+            className="min-w-[240px] flex-1 border border-[#F5F1E8]/10 bg-[#131B2E]/50 px-4 py-2.5 text-sm text-[#F5F1E8] placeholder:text-[#9AA3B5]/40 focus:border-[#C8102E]/50 focus:outline-none"
           />
           <div className="flex flex-wrap gap-2">
             {CATEGORY_FILTERS.map((cf) => (
@@ -125,8 +125,8 @@ export default function Community() {
                 onClick={() => setActiveCategory(cf.value)}
                 className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider border transition-all ${
                   activeCategory === cf.value
-                    ? 'border-accent bg-accent text-black'
-                    : 'border-white/10 text-white/50 hover:border-white/20 hover:text-white'
+                    ? 'border-[#C8102E] bg-[#C8102E] text-[#F5F1E8]'
+                    : 'border-[#F5F1E8]/10 text-[#9AA3B5] hover:border-[#F5F1E8]/20 hover:text-[#F5F1E8]'
                 }`}
               >
                 {cf.label}
@@ -146,13 +146,13 @@ export default function Community() {
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32 text-center">
             <span className="text-6xl mb-4">👕</span>
-            <p className="text-xl font-bold text-white/70">No garments yet</p>
-            <p className="mt-2 text-sm text-white/40 max-w-sm">
+            <p className="text-xl font-bold text-[#F5F1E8]/70">No garments yet</p>
+            <p className="mt-2 text-sm text-[#9AA3B5] max-w-sm">
               Be the first to upload! Click "Upload Your Clothes" to add the first piece to the community wardrobe.
             </p>
             <button
               onClick={() => setUploadOpen(true)}
-              className="mt-6 bg-accent px-6 py-2.5 text-sm font-black uppercase tracking-wider text-black hover:brightness-110"
+              className="mt-6 bg-[#C8102E] px-6 py-2.5 text-sm font-bold uppercase tracking-wider text-[#F5F1E8] hover:brightness-110"
             >
               Upload First Garment
             </button>
@@ -192,7 +192,7 @@ function GarmentCard({ garment, onTryOn }: { garment: Garment; onTryOn: (g: Garm
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className="group relative flex flex-col overflow-hidden border border-white/10 bg-[#111111] transition-all duration-300 hover:border-accent/40"
+      className="group relative flex flex-col overflow-hidden border border-[#F5F1E8]/10 bg-[#131B2E] transition-all duration-300 hover:border-[#D4A017]/40"
     >
       {/* Thumbnail */}
       <div className="relative aspect-square overflow-hidden bg-black/30">
@@ -221,16 +221,16 @@ function GarmentCard({ garment, onTryOn }: { garment: Garment; onTryOn: (g: Garm
       {/* Info */}
       <div className="flex flex-1 flex-col gap-3 p-4">
         <div>
-          <h3 className="font-bold text-white line-clamp-1">{garment.name}</h3>
-          <p className="text-xs text-white/40 mt-0.5">by {uploadedBy}</p>
-          {garment.brand && <p className="text-xs text-accent/80 mt-0.5">{garment.brand}</p>}
+          <h3 className="font-bold text-[#F5F1E8] line-clamp-1">{garment.name}</h3>
+          <p className="text-xs text-[#9AA3B5] mt-0.5">by {uploadedBy}</p>
+          {garment.brand && <p className="text-xs text-[#D4A017] mt-0.5">{garment.brand}</p>}
         </div>
         {garment.price && (
-          <p className="text-sm font-extrabold text-accent">Rs. {garment.price}</p>
+          <p className="text-sm font-extrabold text-[#D4A017]">Rs. {garment.price}</p>
         )}
         <button
           onClick={() => onTryOn(garment)}
-          className="mt-auto w-full border border-accent/30 bg-accent/10 py-2.5 text-xs font-black uppercase tracking-wider text-accent transition-all hover:bg-accent hover:text-black"
+          className="mt-auto w-full border border-[#C8102E]/30 bg-[#C8102E]/10 py-2.5 text-xs font-bold uppercase tracking-wider text-[#C8102E] transition-all hover:bg-[#C8102E] hover:text-[#F5F1E8]"
         >
           Try On →
         </button>
