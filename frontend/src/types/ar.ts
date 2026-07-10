@@ -9,7 +9,14 @@ export interface NormalizedLandmark {
 /** Pose landmark array. */
 export type PoseLandmarks = readonly NormalizedLandmark[];
 
-
+/** Torso box used for garment placement. */
+export interface TorsoBox {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+  readonly angle: number;
+}
 
 /** Runtime state for the AR session. */
 export interface ARState {
