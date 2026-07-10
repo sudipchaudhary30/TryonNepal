@@ -28,7 +28,15 @@ const CATEGORY_BADGE_COLORS: Record<string, string> = {
   ACCESSORY:  'bg-teal-500/20 text-teal-300 border-teal-500/30',
 };
 
+export default function Community() {
+  const { selectedGarment, selectGarment } = useWardrobeStore();
 
+  const [allGarments, setAllGarments]   = useState<Garment[]>([]);
+  const [filtered, setFiltered]         = useState<Garment[]>([]);
+  const [isLoading, setIsLoading]       = useState(true);
+  const [uploadOpen, setUploadOpen]     = useState(false);
+  const [activeCategory, setActiveCategory] = useState('ALL');
+  const [searchQuery, setSearchQuery]   = useState('');
 
   // When non-null → show ARFittingRoom for this garment
   const [arGarment, setArGarment] = useState<Garment | null>(null);
