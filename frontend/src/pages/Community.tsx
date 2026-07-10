@@ -9,15 +9,7 @@ import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { demoGarments } from '@/lib/demoGarments';
 import type { Garment } from '@/types/garment';
 
-const CATEGORY_FILTERS: { label: string; value: string }[] = [
-  { label: 'All',         value: 'ALL' },
-  { label: 'Tops',        value: 'TOP' },
-  { label: 'Bottoms',     value: 'BOTTOM' },
-  { label: 'Dresses',     value: 'DRESS' },
-  { label: 'Outerwear',   value: 'OUTERWEAR' },
-  { label: 'Traditional', value: 'TRADITIONAL' },
-  { label: 'Accessories', value: 'ACCESSORY' },
-];
+add
 
 const CATEGORY_BADGE_COLORS: Record<string, string> = {
   TOP:        'bg-blue-500/20 text-blue-300 border-blue-500/30',
