@@ -19,17 +19,16 @@ const CATEGORY_FILTERS: { label: string; value: string }[] = [
   { label: 'Accessories', value: 'ACCESSORY' },
 ];
 
+const CATEGORY_BADGE_COLORS: Record<string, string> = {
+  TOP:        'bg-blue-500/20 text-blue-300 border-blue-500/30',
+  BOTTOM:     'bg-purple-500/20 text-purple-300 border-purple-500/30',
+  DRESS:      'bg-pink-500/20 text-pink-300 border-pink-500/30',
+  OUTERWEAR:  'bg-orange-500/20 text-orange-300 border-orange-500/30',
+  TRADITIONAL:'bg-amber-500/20 text-amber-300 border-amber-500/30',
+  ACCESSORY:  'bg-teal-500/20 text-teal-300 border-teal-500/30',
+};
 
 
-export default function Community() {
-  const { selectedGarment, selectGarment } = useWardrobeStore();
-
-  const [allGarments, setAllGarments]   = useState<Garment[]>([]);
-  const [filtered, setFiltered]         = useState<Garment[]>([]);
-  const [isLoading, setIsLoading]       = useState(true);
-  const [uploadOpen, setUploadOpen]     = useState(false);
-  const [activeCategory, setActiveCategory] = useState('ALL');
-  const [searchQuery, setSearchQuery]   = useState('');
 
   // When non-null → show ARFittingRoom for this garment
   const [arGarment, setArGarment] = useState<Garment | null>(null);
