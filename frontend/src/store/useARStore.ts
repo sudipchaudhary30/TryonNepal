@@ -5,7 +5,18 @@ import { create } from 'zustand';
 import type { ARState, GarmentType, NormalizedLandmark, TryOnResult } from '@/types/ar';
 import type { Garment } from '@/types/garment';
 
-
+interface ARStore extends ARState {
+  fps: number;
+  selectedGarment: Garment | null;
+  tryOnResult: TryOnResult | null;
+  setLandmarks: (landmarks: readonly NormalizedLandmark[] | null) => void;
+  setFps: (fps: number) => void;
+  selectGarment: (garment: Garment | null) => void;
+  setTryOnResult: (result: TryOnResult | null) => void;
+  resetAR: () => void;
+  setError: (error: string | null) => void;
+  setActive: (isActive: boolean) => void;
+}
 
 const initialState: Pick<ARStore, 'isActive' | 'landmarks' | 'isLoading' | 'error' | 'fps' | 'selectedGarment' | 'tryOnResult'> = {
   isActive: false,
