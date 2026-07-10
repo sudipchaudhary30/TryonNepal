@@ -44,7 +44,15 @@ export const useARStore = create<ARStore>()(
       setTryOnResult: (result) => set((state) => {
         state.tryOnResult = result;
       }),
-   
+      resetAR: () => set((state) => {
+        state.isActive = false;
+        state.landmarks = null;
+        state.isLoading = false;
+        state.error = null;
+        state.fps = 0;
+        state.selectedGarment = null;
+        state.tryOnResult = null;
+      }),
       setError: (error) => set((state) => {
         state.error = error;
       }),
