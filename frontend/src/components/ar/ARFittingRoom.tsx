@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shirt, Check } from 'lucide-react';
+import { Shirt, Check, ArrowLeftRight, AlertTriangle } from 'lucide-react';
 import CameraView from '@/components/ar/CameraView';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { getGarmentTypeFromCategory } from '@/lib/demoGarments';

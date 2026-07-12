@@ -43,13 +43,13 @@ def resolve_garment_asset_path(asset_url: str | None) -> str | None:
     normalized = asset_url.strip()
     if normalized.startswith('/clothes/'):
         relative_path = normalized.lstrip('/')
-        return os.path.join(PROJECT_ROOT, 'frontend', 'public', relative_path)
+        return os.path.normpath(os.path.join(PROJECT_ROOT, 'frontend', 'public', relative_path))
 
     if normalized.startswith('/uploads/'):
         legacy_path = normalized.lstrip('/')
-        return os.path.join(PROJECT_ROOT, legacy_path)
+        return os.path.normpath(os.path.join(PROJECT_ROOT, legacy_path))
 
-    return os.path.join(PROJECT_ROOT, 'frontend', 'public', normalized.lstrip('/'))
+    return os.path.normpath(os.path.join(PROJECT_ROOT, 'frontend', 'public', normalized.lstrip('/')))
 
 
 # Demo garments to seed on startup
@@ -237,6 +237,7 @@ async def list_garments(
     scope='wardrobe'  → only private garments belonging to user_id
     scope='all'       → everything (default, used by TryOn page)
     """
+    items: list[dict[str, object]] = []
     try:
         collection = _get_garments_collection()
         if collection is not None:
