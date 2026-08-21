@@ -148,11 +148,11 @@ export const usePostureDetection = (landmarks: any[] | null) => {
         isTurned = Math.abs(shoulderRotation) > 15;
       }
 
-      // Determine if back to camera (shoulders visible but nose/eyes not visible properly)
-      const isBackToCamera =
-        shouldersVisible &&
-        !isLookingAtCamera &&
-        (!headVisible || nose?.visibility < 0.15);
+      // // Determine if back to camera (shoulders visible but nose/eyes not visible properly)
+      // const isBackToCamera =
+      //   shouldersVisible &&
+      //   !isLookingAtCamera &&
+      //   (!headVisible || nose?.visibility < 0.15);
 
       // Overall body confidence
       const bodyConfidence = Math.min(
