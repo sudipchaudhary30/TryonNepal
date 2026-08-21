@@ -57,16 +57,16 @@ export const usePostureDetection = (landmarks: any[] | null) => {
     const LEFT_ANKLE = 27;
     const RIGHT_ANKLE = 28;
 
-    // try {
-    //   const nose = landmarks[NOSE];
-    //   const leftEye = landmarks[LEFT_EYE];
-    //   const rightEye = landmarks[RIGHT_EYE];
-    //   const leftShoulder = landmarks[LEFT_SHOULDER];
-    //   const rightShoulder = landmarks[RIGHT_SHOULDER];
-    //   const leftHip = landmarks[LEFT_HIP];
-    //   const rightHip = landmarks[RIGHT_HIP];
-    //   const leftKnee = landmarks[LEFT_KNEE];
-    //   const rightKnee = landmarks[RIGHT_KNEE];
+    try {
+      const nose = landmarks[NOSE];
+      const leftEye = landmarks[LEFT_EYE];
+      const rightEye = landmarks[RIGHT_EYE];
+      const leftShoulder = landmarks[LEFT_SHOULDER];
+      const rightShoulder = landmarks[RIGHT_SHOULDER];
+      const leftHip = landmarks[LEFT_HIP];
+      const rightHip = landmarks[RIGHT_HIP];
+      const leftKnee = landmarks[LEFT_KNEE];
+      const rightKnee = landmarks[RIGHT_KNEE];
 
       // Visibility thresholds
       const VISIBLE_THRESHOLD = 0.1;
