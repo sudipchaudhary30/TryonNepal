@@ -20,21 +20,21 @@ export default function Design() {
 
   const subtitle = useMemo(() => `Template: ${template}`, [template]);
 
-  // return (
-  //   <div className="mx-auto grid min-h-[calc(100vh-73px)] max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[220px_minmax(0,1fr)_320px] lg:px-6">
-  //     <aside className="rounded-2xl border border-white/10 bg-card p-4">
-  //       <h2 className="font-display text-2xl font-bold text-white">Tools</h2>
-  //       <div className="mt-4 grid gap-2">
-  //         {tools.map((tool) => (
-  //           <button
-  //             key={tool}
-  //             type="button"
-  //             onClick={() => setActiveTool(tool)}
-  //             className={`rounded-xl border px-3 py-2 text-left text-sm transition-colors ${
-  //               activeTool === tool ? 'border-accent bg-accent/10 text-accent' : 'border-white/10 bg-black/20 text-white/80'
-  //             }`}
-  //           >
-  //             {tool}
+  return (
+    <div className="mx-auto grid min-h-[calc(100vh-73px)] max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[220px_minmax(0,1fr)_320px] lg:px-6">
+      <aside className="rounded-2xl border border-white/10 bg-card p-4">
+        <h2 className="font-display text-2xl font-bold text-white">Tools</h2>
+        <div className="mt-4 grid gap-2">
+          {tools.map((tool) => (
+            <button
+              key={tool}
+              type="button"
+              onClick={() => setActiveTool(tool)}
+              className={`rounded-xl border px-3 py-2 text-left text-sm transition-colors ${
+                activeTool === tool ? 'border-accent bg-accent/10 text-accent' : 'border-white/10 bg-black/20 text-white/80'
+              }`}
+            >
+              {tool}
             </button>
           ))}
         </div>
