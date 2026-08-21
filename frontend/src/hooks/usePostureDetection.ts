@@ -42,20 +42,20 @@ export const usePostureDetection = (landmarks: any[] | null) => {
       return;
     }
 
-    // Key landmarks indices
-    const NOSE = 0;
-    const LEFT_EYE = 2;
-    const RIGHT_EYE = 5;
-    const LEFT_SHOULDER = 11;
-    const RIGHT_SHOULDER = 12;
-    const LEFT_ELBOW = 13;
-    const RIGHT_ELBOW = 14;
-    const LEFT_HIP = 23;
-    const RIGHT_HIP = 24;
-    const LEFT_KNEE = 25;
-    const RIGHT_KNEE = 26;
-    const LEFT_ANKLE = 27;
-    const RIGHT_ANKLE = 28;
+    // // Key landmarks indices
+    // const NOSE = 0;
+    // const LEFT_EYE = 2;
+    // const RIGHT_EYE = 5;
+    // const LEFT_SHOULDER = 11;
+    // const RIGHT_SHOULDER = 12;
+    // const LEFT_ELBOW = 13;
+    // const RIGHT_ELBOW = 14;
+    // const LEFT_HIP = 23;
+    // const RIGHT_HIP = 24;
+    // const LEFT_KNEE = 25;
+    // const RIGHT_KNEE = 26;
+    // const LEFT_ANKLE = 27;
+    // const RIGHT_ANKLE = 28;
 
     try {
       const nose = landmarks[NOSE];
