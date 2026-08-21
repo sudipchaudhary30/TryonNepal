@@ -87,13 +87,13 @@ export const usePostureDetection = (landmarks: any[] | null) => {
         leftKnee?.visibility > VISIBLE_THRESHOLD &&
         rightKnee?.visibility > VISIBLE_THRESHOLD;
 
-      // Calculate head tilt (using eye positions)
-      let headTilt = 0;
-      if (leftEye && rightEye) {
-        const eyeHeightDiff = rightEye.y - leftEye.y;
-        const eyeDistance = Math.abs(rightEye.x - leftEye.x);
-        headTilt = Math.atan2(eyeHeightDiff, eyeDistance);
-      }
+      // // Calculate head tilt (using eye positions)
+      // let headTilt = 0;
+      // if (leftEye && rightEye) {
+      //   const eyeHeightDiff = rightEye.y - leftEye.y;
+      //   const eyeDistance = Math.abs(rightEye.x - leftEye.x);
+      //   headTilt = Math.atan2(eyeHeightDiff, eyeDistance);
+      // }
 
       // Calculate shoulder rotation (how much person is turned)
       let shoulderRotation = 0;
