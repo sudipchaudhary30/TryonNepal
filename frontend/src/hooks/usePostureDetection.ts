@@ -131,16 +131,16 @@ export const usePostureDetection = (landmarks: any[] | null) => {
         hipConfidence = (leftHip.visibility + rightHip.visibility) / 2;
       }
 
-      // // Determine if person is looking at camera (nose roughly between eyes and centered)
-      // let isLookingAtCamera = false;
-      // if (headVisible && nose && leftEye && rightEye) {
-      //   const noseX = nose.x;
-      //   const eyeCenterX = (leftEye.x + rightEye.x) / 2;
-      //   const eyeDistance = Math.abs(rightEye.x - leftEye.x);
+      // Determine if person is looking at camera (nose roughly between eyes and centered)
+      let isLookingAtCamera = false;
+      if (headVisible && nose && leftEye && rightEye) {
+        const noseX = nose.x;
+        const eyeCenterX = (leftEye.x + rightEye.x) / 2;
+        const eyeDistance = Math.abs(rightEye.x - leftEye.x);
 
-      //   // If nose is roughly centered between eyes, looking at camera
-      //   isLookingAtCamera = Math.abs(noseX - eyeCenterX) < eyeDistance * 0.15;
-      // }
+        // If nose is roughly centered between eyes, looking at camera
+        isLookingAtCamera = Math.abs(noseX - eyeCenterX) < eyeDistance * 0.15;
+      }
 
       // Determine if turned to side
       let isTurned = false;
