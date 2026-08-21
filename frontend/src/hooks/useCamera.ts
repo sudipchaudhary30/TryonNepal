@@ -65,21 +65,21 @@ export function useCamera(): CameraState {
           await video.play().catch(() => undefined);
         }
 
-        setIsReady(true);
-      } catch (caughtError) {
-        const domError = caughtError as DOMException;
-        if (domError.name === 'NotAllowedError') {
-          setError('Camera permission denied');
-        } else if (domError.name === 'NotFoundError') {
-          setError('No camera found');
-        } else {
-          setError(domError.message || 'Unable to access camera');
-        }
-        setIsReady(false);
-      } finally {
-        startPromiseRef.current = null;
-      }
-    })();
+    //     setIsReady(true);
+    //   } catch (caughtError) {
+    //     const domError = caughtError as DOMException;
+    //     if (domError.name === 'NotAllowedError') {
+    //       setError('Camera permission denied');
+    //     } else if (domError.name === 'NotFoundError') {
+    //       setError('No camera found');
+    //     } else {
+    //       setError(domError.message || 'Unable to access camera');
+    //     }
+    //     setIsReady(false);
+    //   } finally {
+    //     startPromiseRef.current = null;
+    //   }
+    // })();
 
     startPromiseRef.current = startPromise;
     return startPromise;
