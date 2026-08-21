@@ -102,11 +102,11 @@ export const usePostureDetection = (landmarks: any[] | null) => {
         const shoulderMidX = (leftShoulder.x + rightShoulder.x) / 2;
         const shoulderMidY = (leftShoulder.y + rightShoulder.y) / 2;
 
-        // Hip position
-        let hipMidX = 0.5;
-        if (leftHip && rightHip) {
-          hipMidX = (leftHip.x + rightHip.x) / 2;
-        }
+        // // Hip position
+        // let hipMidX = 0.5;
+        // if (leftHip && rightHip) {
+        //   hipMidX = (leftHip.x + rightHip.x) / 2;
+        // }
 
         // Angle of shoulder line
         const shoulderAngle = Math.atan2(
