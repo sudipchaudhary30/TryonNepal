@@ -3,12 +3,12 @@ import { useCallback, useState } from 'react';
 import { tryOnApi } from '@/lib/api';
 import type { GarmentType, TryOnResult } from '@/types/ar';
 
-interface UseTryOnResult {
-  resultUrl: string | null;
-  isProcessing: boolean;
-  error: string | null;
-  trigger: (personBlob: Blob, garmentId: string, garmentType: GarmentType) => Promise<void>;
-}
+// interface UseTryOnResult {
+//   resultUrl: string | null;
+//   isProcessing: boolean;
+//   error: string | null;
+//   trigger: (personBlob: Blob, garmentId: string, garmentType: GarmentType) => Promise<void>;
+// }
 
 export function useTryOn(): UseTryOnResult {
   const [resultUrl, setResultUrl] = useState<string | null>(null);
