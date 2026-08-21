@@ -24,10 +24,7 @@ export function useCamera(): CameraState {
       videoRef.current.pause();
       videoRef.current.srcObject = null;
     }
-    setStream(null);
-    setIsReady(false);
-    startPromiseRef.current = null;
-  }, []);
+    
 
   const startCamera = useCallback(async () => {
     if (startPromiseRef.current) {
