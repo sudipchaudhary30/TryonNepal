@@ -119,28 +119,28 @@ export const usePostureDetection = (landmarks: any[] | null) => {
           (leftShoulder.visibility + rightShoulder.visibility) / 2;
       }
 
-      // // Calculate hip rotation (similar to shoulder)
-      // let hipRotation = 0;
-      // let hipConfidence = 0;
-      // if (leftHip && rightHip) {
-      //   const hipAngle = Math.atan2(
-      //     rightHip.y - leftHip.y,
-      //     rightHip.x - leftHip.x
-      //   );
-      //   hipRotation = (hipAngle * 180) / Math.PI;
-      //   hipConfidence = (leftHip.visibility + rightHip.visibility) / 2;
-      // }
-
-      // Determine if person is looking at camera (nose roughly between eyes and centered)
-      let isLookingAtCamera = false;
-      if (headVisible && nose && leftEye && rightEye) {
-        const noseX = nose.x;
-        const eyeCenterX = (leftEye.x + rightEye.x) / 2;
-        const eyeDistance = Math.abs(rightEye.x - leftEye.x);
-
-        // If nose is roughly centered between eyes, looking at camera
-        isLookingAtCamera = Math.abs(noseX - eyeCenterX) < eyeDistance * 0.15;
+      // Calculate hip rotation (similar to shoulder)
+      let hipRotation = 0;
+      let hipConfidence = 0;
+      if (leftHip && rightHip) {
+        const hipAngle = Math.atan2(
+          rightHip.y - leftHip.y,
+          rightHip.x - leftHip.x
+        );
+        hipRotation = (hipAngle * 180) / Math.PI;
+        hipConfidence = (leftHip.visibility + rightHip.visibility) / 2;
       }
+
+      // // Determine if person is looking at camera (nose roughly between eyes and centered)
+      // let isLookingAtCamera = false;
+      // if (headVisible && nose && leftEye && rightEye) {
+      //   const noseX = nose.x;
+      //   const eyeCenterX = (leftEye.x + rightEye.x) / 2;
+      //   const eyeDistance = Math.abs(rightEye.x - leftEye.x);
+
+      //   // If nose is roughly centered between eyes, looking at camera
+      //   isLookingAtCamera = Math.abs(noseX - eyeCenterX) < eyeDistance * 0.15;
+      // }
 
       // Determine if turned to side
       let isTurned = false;
