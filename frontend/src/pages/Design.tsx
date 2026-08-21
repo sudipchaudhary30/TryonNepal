@@ -63,7 +63,7 @@ export default function Design() {
             className="w-full max-w-xs rounded-full border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none ring-0 placeholder:text-white/30 focus:border-accent"
           />
         </div>
-        {/* <FabricCanvas
+        <FabricCanvas
           ref={canvasRef}
           template={template}
           activeTool={activeTool}
@@ -75,7 +75,7 @@ export default function Design() {
             setCanUndo(undo);
             setCanRedo(redo);
           }}
-        /> */}
+        />
       </section>
 
       <aside className="rounded-2xl border border-white/10 bg-card p-4">
