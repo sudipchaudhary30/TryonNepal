@@ -6,17 +6,17 @@ import Button from '@/components/ui/Button';
 const templates = ['tshirt', 'kurta', 'pants', 'jacket', 'sherwani', 'daura-suruwal'] as const;
 const tools: FabricTool[] = ['select', 'draw', 'text', 'rect', 'circle', 'image', 'eraser'];
 
-export default function Design() {
-  const [template, setTemplate] = useState<(typeof templates)[number]>('tshirt');
-  const [designName, setDesignName] = useState('Untitled Design');
-  const [activeTool, setActiveTool] = useState<FabricTool>('select');
-  const [canUndo, setCanUndo] = useState(false);
-  const [canRedo, setCanRedo] = useState(false);
-  const [strokeColor, setStrokeColor] = useState('#111111');
-  const [fillColor, setFillColor] = useState('#e8ff47');
-  const [brushSize, setBrushSize] = useState(8);
-  const [opacity, setOpacity] = useState(1);
-  const canvasRef = useRef<FabricCanvasHandle>(null);
+// export default function Design() {
+//   const [template, setTemplate] = useState<(typeof templates)[number]>('tshirt');
+//   const [designName, setDesignName] = useState('Untitled Design');
+//   const [activeTool, setActiveTool] = useState<FabricTool>('select');
+//   const [canUndo, setCanUndo] = useState(false);
+//   const [canRedo, setCanRedo] = useState(false);
+//   const [strokeColor, setStrokeColor] = useState('#111111');
+//   const [fillColor, setFillColor] = useState('#e8ff47');
+//   const [brushSize, setBrushSize] = useState(8);
+//   const [opacity, setOpacity] = useState(1);
+//   const canvasRef = useRef<FabricCanvasHandle>(null);
 
   const subtitle = useMemo(() => `Template: ${template}`, [template]);
 
