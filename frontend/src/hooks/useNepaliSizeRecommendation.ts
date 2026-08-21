@@ -147,17 +147,17 @@ export function useNepaliSizeRecommendation(
 
     const dr = metrics.distanceRatio;
 
-    // Too far away → pixel measurements are noisy and inaccurate
-    if (dr < IDEAL_RANGE_MIN) {
-      return {
-        size:       'UNKNOWN',
-        confidence: 0,
-        shoulderCm: 0,
-        chestEstCm: 0,
-        fitNote:    'Stand closer for accurate reading',
-        isReliable: false,
-      };
-    }
+    // // Too far away → pixel measurements are noisy and inaccurate
+    // if (dr < IDEAL_RANGE_MIN) {
+    //   return {
+    //     size:       'UNKNOWN',
+    //     confidence: 0,
+    //     shoulderCm: 0,
+    //     chestEstCm: 0,
+    //     fitNote:    'Stand closer for accurate reading',
+    //     isReliable: false,
+    //   };
+    // }
 
     // Estimate real-world shoulder width in cm
     const shoulderCm = Math.round(
