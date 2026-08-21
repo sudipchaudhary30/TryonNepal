@@ -9,13 +9,7 @@ interface CameraState {
   stopCamera: () => void;
 }
 
-export function useCamera(): CameraState {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const startPromiseRef = useRef<Promise<void> | null>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const [isReady, setIsReady] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
 
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
