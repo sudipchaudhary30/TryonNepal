@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 
-export interface BodyPosture {
-  isLookingAtCamera: boolean; // Face directly toward camera
-  isTurned: boolean; // Turned to side
-  isBackToCamera: boolean; // Back to camera
-  headTilt: number; // -1 to 1 (left tilt to right tilt)
-  shoulderRotation: number; // Degree rotation of shoulders
-  hipRotation: number; // Degree rotation of hips
-  bodyConfidence: number; // 0-1 confidence in detection
-  bodyParts: {
-    headVisible: boolean;
-    shouldersVisible: boolean;
-    torsVisible: boolean;
-    legsVisible: boolean;
-  };
-}
+// export interface BodyPosture {
+//   isLookingAtCamera: boolean; // Face directly toward camera
+//   isTurned: boolean; // Turned to side
+//   isBackToCamera: boolean; // Back to camera
+//   headTilt: number; // -1 to 1 (left tilt to right tilt)
+//   shoulderRotation: number; // Degree rotation of shoulders
+//   hipRotation: number; // Degree rotation of hips
+//   bodyConfidence: number; // 0-1 confidence in detection
+//   bodyParts: {
+//     headVisible: boolean;
+//     shouldersVisible: boolean;
+//     torsVisible: boolean;
+//     legsVisible: boolean;
+//   };
+// }
 
 export const usePostureDetection = (landmarks: any[] | null) => {
   const [posture, setPosture] = useState<BodyPosture>({
