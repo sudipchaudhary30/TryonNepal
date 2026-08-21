@@ -16,7 +16,7 @@ export function usePoseDetection(videoRef: React.RefObject<HTMLVideoElement>, is
   const framesCount       = useRef(0);
   const fpsCalculateTime  = useRef<number>(0);
   // Track last processed video timestamp to avoid re-sending the same frame
-  // const lastVideoTime     = useRef<number>(-1);
+  const lastVideoTime     = useRef<number>(-1);
 
   // ── Init MediaPipe Pose ────────────────────────────────────────────────────
   useEffect(() => {
