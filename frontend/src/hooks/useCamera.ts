@@ -17,13 +17,7 @@ export function useCamera(): CameraState {
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const stopCamera = useCallback(() => {
-    streamRef.current?.getTracks().forEach((track) => track.stop());
-    streamRef.current = null;
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.srcObject = null;
-    }
+  
     setStream(null);
     setIsReady(false);
     startPromiseRef.current = null;
