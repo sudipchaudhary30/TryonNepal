@@ -29,16 +29,16 @@ export function useCamera(): CameraState {
     startPromiseRef.current = null;
   }, []);
 
-  const startCamera = useCallback(async () => {
-    if (startPromiseRef.current) {
-      return startPromiseRef.current;
-    }
+  // const startCamera = useCallback(async () => {
+  //   if (startPromiseRef.current) {
+  //     return startPromiseRef.current;
+  //   }
 
-    if (streamRef.current) {
-      setStream(streamRef.current);
-      setIsReady(true);
-      return Promise.resolve();
-    }
+  //   if (streamRef.current) {
+  //     setStream(streamRef.current);
+  //     setIsReady(true);
+  //     return Promise.resolve();
+  //   }
 
     setError(null);
     const startPromise = (async () => {
