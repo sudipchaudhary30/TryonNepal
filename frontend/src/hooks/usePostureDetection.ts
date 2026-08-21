@@ -108,28 +108,28 @@ export const usePostureDetection = (landmarks: any[] | null) => {
           hipMidX = (leftHip.x + rightHip.x) / 2;
         }
 
-      //   // Angle of shoulder line
-      //   const shoulderAngle = Math.atan2(
-      //     rightShoulder.y - leftShoulder.y,
-      //     rightShoulder.x - leftShoulder.x
-      //   );
-
-      //   shoulderRotation = (shoulderAngle * 180) / Math.PI;
-      //   shoulderConfidence =
-      //     (leftShoulder.visibility + rightShoulder.visibility) / 2;
-      // }
-
-      // Calculate hip rotation (similar to shoulder)
-      let hipRotation = 0;
-      let hipConfidence = 0;
-      if (leftHip && rightHip) {
-        const hipAngle = Math.atan2(
-          rightHip.y - leftHip.y,
-          rightHip.x - leftHip.x
+        // Angle of shoulder line
+        const shoulderAngle = Math.atan2(
+          rightShoulder.y - leftShoulder.y,
+          rightShoulder.x - leftShoulder.x
         );
-        hipRotation = (hipAngle * 180) / Math.PI;
-        hipConfidence = (leftHip.visibility + rightHip.visibility) / 2;
+
+        shoulderRotation = (shoulderAngle * 180) / Math.PI;
+        shoulderConfidence =
+          (leftShoulder.visibility + rightShoulder.visibility) / 2;
       }
+
+      // // Calculate hip rotation (similar to shoulder)
+      // let hipRotation = 0;
+      // let hipConfidence = 0;
+      // if (leftHip && rightHip) {
+      //   const hipAngle = Math.atan2(
+      //     rightHip.y - leftHip.y,
+      //     rightHip.x - leftHip.x
+      //   );
+      //   hipRotation = (hipAngle * 180) / Math.PI;
+      //   hipConfidence = (leftHip.visibility + rightHip.visibility) / 2;
+      // }
 
       // Determine if person is looking at camera (nose roughly between eyes and centered)
       let isLookingAtCamera = false;
