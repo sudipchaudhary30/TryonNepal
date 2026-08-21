@@ -516,7 +516,7 @@ export default function Home() {
 
       <DhakaDivider />
 
-      {/* ----------------------------------------------------------------
+      ----------------------------------------------------------------
       {/* CLOSING CTA                                                       */}
       {/* ---------------------------------------------------------------- */}
       <section className="mx-auto max-w-7xl px-6 py-28 text-center lg:px-8">
@@ -531,7 +531,7 @@ export default function Home() {
         >
           Launch Try-On Room
         </Link>
-      </section> */}
+      </section>
 
       <Footer />
     </div>
